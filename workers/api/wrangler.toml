@@ -5,7 +5,7 @@ compatibility_date = "2024-09-23"
 [[d1_databases]]
 binding = "DB"
 database_name = "doposcuola-db"
-database_id = "YOUR_D1_DATABASE_ID"   # sostituisci dopo: wrangler d1 create doposcuola-db
+database_id = "76483fb6-5f11-40cd-a77c-e94637622953"   # sostituisci dopo: wrangler d1 create doposcuola-db
 
 [vars]
 FRONTEND_ORIGIN = "https://gestione-doposcuola-imola.pages.dev"
