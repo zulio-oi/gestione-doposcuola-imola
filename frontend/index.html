@@ -3,213 +3,715 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gestione Doposcuola — Officina Immaginata</title>
+<title>Doposcuola — Cooperativa Officina Immaginata</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Titillium+Web:wght@300;400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
-/* ---- Reset & tokens ---- */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── Token System ─────────────────────────────────────────── */
 :root {
-  --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --blue:   #2563eb; --blue-dk: #1d4ed8; --blue-lt: #eff6ff;
-  --green:  #16a34a; --green-lt: #f0fdf4;
-  --amber:  #d97706; --amber-lt: #fffbeb;
-  --red:    #dc2626; --red-lt:   #fef2f2;
-  --slate:  #64748b;
-  --bg:     #f8fafc;
-  --card:   #ffffff;
-  --border: #e2e8f0;
-  --text:   #0f172a;
-  --muted:  #94a3b8;
-  --radius: 8px;
+  --blue:       #0B3954;
+  --blue-mid:   #0d4568;
+  --blue-lt:    #e8f1f6;
+  --pacific:    #4ea5c0;
+  --pacific-lt: #e8f5f9;
+  --saffron:    #EDBC1D;
+  --saffron-lt: #fef9e7;
+  --terracotta: #E94F37;
+  --terra-lt:   #fdecea;
+  --white:      #FEFFFE;
+  --carbon:     #1E1E1E;
+  --slate:      #5a6a7a;
+  --border:     #dce6ec;
+  --bg:         #f4f8fb;
+
+  --font-head: 'Poppins', sans-serif;
+  --font-body: 'Titillium Web', sans-serif;
+  --radius:    10px;
+  --radius-lg: 16px;
+  --shadow:    0 2px 12px rgba(11,57,84,0.08);
+  --shadow-md: 0 4px 24px rgba(11,57,84,0.12);
 }
-body { font-family: var(--font); font-size: 14px; color: var(--text); background: var(--bg); min-height: 100vh; }
 
-/* ---- Layout ---- */
+/* ── Reset ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--carbon);
+  background: var(--bg);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--pacific); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Typography ──────────────────────────────────────────── */
+h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 700; line-height: 1.2; }
+h1 { font-size: 22px; }
+h2 { font-size: 18px; }
+h3 { font-size: 16px; }
+.page-title { font-size: 22px; font-weight: 700; font-family: var(--font-head); }
+.page-sub   { font-size: 13.5px; color: var(--slate); margin-top: 3px; font-family: var(--font-body); }
+
+/* ── Layout ──────────────────────────────────────────────── */
 #app { display: flex; flex-direction: column; min-height: 100vh; }
-.topbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 1.25rem; height: 52px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 20; }
-.topbar-brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; }
-.topbar-brand i { color: var(--blue); font-size: 22px; }
+
+/* Topbar */
+.topbar {
+  background: var(--blue);
+  height: 56px;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-icon {
+  width: 34px;
+  height: 34px;
+  background: var(--terracotta);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.brand-icon i { font-size: 20px; color: var(--white); }
+.brand-text { display: flex; flex-direction: column; }
+.brand-name { font-family: var(--font-head); font-weight: 700; font-size: 14px; color: var(--white); line-height: 1.1; }
+.brand-sub  { font-family: var(--font-body); font-size: 10.5px; color: var(--pacific); letter-spacing: 0.03em; line-height: 1; }
 .topbar-right { display: flex; align-items: center; gap: 10px; }
-.user-chip { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--slate); }
-.role-pill { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
-.role-admin     { background: #ede9fe; color: #6d28d9; }
-.role-genitore  { background: var(--blue-lt); color: var(--blue); }
-.role-operatore { background: var(--green-lt); color: var(--green); }
+.user-info { display: flex; align-items: center; gap: 8px; }
+.user-name { font-family: var(--font-body); font-size: 13px; color: rgba(255,255,255,0.8); }
+.role-pill { font-family: var(--font-head); font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 99px; letter-spacing: 0.04em; text-transform: uppercase; }
+.role-admin     { background: var(--saffron); color: var(--blue); }
+.role-genitore  { background: var(--pacific); color: var(--white); }
+.role-operatore { background: #2d7a4f; color: var(--white); }
+
+/* Body layout */
 .body { display: flex; flex: 1; }
-.sidebar { width: 210px; flex-shrink: 0; background: var(--card); border-right: 1px solid var(--border); padding: 0.75rem 0; }
-.nav-item { display: flex; align-items: center; gap: 9px; padding: 9px 16px; font-size: 13.5px; color: var(--slate); cursor: pointer; border-left: 3px solid transparent; transition: background 0.1s; }
-.nav-item i { font-size: 18px; }
-.nav-item:hover { background: var(--bg); color: var(--text); }
-.nav-item.active { background: var(--blue-lt); color: var(--blue); border-left-color: var(--blue); font-weight: 500; }
-.nav-section { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; padding: 14px 16px 4px; font-weight: 600; }
-.content { flex: 1; padding: 1.5rem; overflow-y: auto; max-width: 960px; }
 
-/* ---- Components ---- */
-.page-header { margin-bottom: 1.5rem; }
-.page-header h1 { font-size: 20px; font-weight: 600; }
-.page-header p  { color: var(--slate); font-size: 13px; margin-top: 3px; }
-.ph-row { display: flex; justify-content: space-between; align-items: flex-start; }
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+}
+.nav-section {
+  font-family: var(--font-head);
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 12px 18px 5px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 18px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--slate);
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+  position: relative;
+}
+.nav-item i { font-size: 18px; flex-shrink: 0; }
+.nav-item:hover { background: var(--bg); color: var(--blue); }
+.nav-item.active {
+  background: var(--blue-lt);
+  color: var(--blue);
+  border-left-color: var(--terracotta);
+  font-weight: 600;
+}
 
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+/* Content */
+.content { flex: 1; padding: 1.75rem; overflow-y: auto; }
+
+/* ── Cards ───────────────────────────────────────────────── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.375rem;
+  box-shadow: var(--shadow);
+}
 .card + .card { margin-top: 1rem; }
-.card-title { font-weight: 600; font-size: 14px; margin-bottom: 1rem; display: flex; align-items: center; gap: 7px; }
-.card-title i { color: var(--blue); }
+.card-title {
+  font-family: var(--font-head);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--blue);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.card-title i { color: var(--pacific); font-size: 17px; }
 
-.metrics { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 1.5rem; }
-.metric { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; }
-.metric-label { font-size: 12px; color: var(--slate); margin-bottom: 6px; }
-.metric-value { font-size: 26px; font-weight: 700; line-height: 1; }
-.metric-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+/* ── Metrics ─────────────────────────────────────────────── */
+.metrics { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 1.5rem; }
+.metric {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.125rem 1.25rem;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.metric::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--pacific);
+}
+.metric.accent::before { background: var(--terracotta); }
+.metric.warn::before   { background: var(--saffron); }
+.metric.danger::before { background: var(--terracotta); }
+.metric-label { font-family: var(--font-body); font-size: 12px; color: var(--slate); margin-bottom: 6px; }
+.metric-value { font-family: var(--font-head); font-size: 28px; font-weight: 700; color: var(--blue); line-height: 1; }
+.metric-sub   { font-family: var(--font-body); font-size: 12px; color: var(--slate); margin-top: 4px; }
 
+/* ── Table ───────────────────────────────────────────────── */
+.table-wrap {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
 table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-th { text-align: left; font-size: 11.5px; font-weight: 600; color: var(--slate); text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 14px; background: var(--bg); border-bottom: 1px solid var(--border); }
-td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+th {
+  text-align: left;
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 11px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; font-family: var(--font-body); }
 tr:last-child td { border-bottom: none; }
-tr:hover td { background: #fafafa; }
-.table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+tr:hover td { background: #fafcfe; }
+.td-name { font-family: var(--font-head); font-weight: 600; font-size: 14px; color: var(--blue); }
+.td-sub  { font-family: var(--font-body); font-size: 12px; color: var(--slate); margin-top: 2px; }
 
-.badge { display: inline-block; font-size: 11.5px; font-weight: 600; padding: 2px 9px; border-radius: 99px; }
-.badge-success { background: var(--green-lt); color: var(--green); }
-.badge-warning { background: var(--amber-lt); color: var(--amber); }
-.badge-danger  { background: var(--red-lt);   color: var(--red); }
-.badge-neutral { background: var(--bg); color: var(--slate); border: 1px solid var(--border); }
-.badge-blue    { background: var(--blue-lt); color: var(--blue); }
+/* ── Badges ──────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 99px;
+}
+.badge-success  { background: #e8f5f0; color: #1a6b3a; }
+.badge-warning  { background: var(--saffron-lt); color: #7a5a00; }
+.badge-danger   { background: var(--terra-lt); color: var(--terracotta); }
+.badge-neutral  { background: var(--bg); color: var(--slate); border: 1px solid var(--border); }
+.badge-blue     { background: var(--blue-lt); color: var(--blue); }
+.badge-pacific  { background: var(--pacific-lt); color: #0d6a85; }
 
-.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); font-size: 13.5px; font-family: var(--font); cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--text); font-weight: 500; transition: background 0.1s; }
-.btn:hover { background: var(--bg); }
-.btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; }
-.btn-primary:hover { background: var(--blue-dk); }
-.btn-sm { padding: 4px 10px; font-size: 12.5px; }
-.btn-danger { background: var(--red-lt); border-color: #fecaca; color: var(--red); }
-.btn-success { background: var(--green-lt); border-color: #bbf7d0; color: var(--green); }
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  font-family: var(--font-head);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--blue);
+  transition: all 0.15s;
+  line-height: 1;
+}
+.btn:hover { background: var(--bg); border-color: var(--pacific); }
+.btn-primary {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--white);
+}
+.btn-primary:hover { background: var(--blue-mid); border-color: var(--blue-mid); }
+.btn-accent {
+  background: var(--terracotta);
+  border-color: var(--terracotta);
+  color: var(--white);
+}
+.btn-accent:hover { background: #d4432d; border-color: #d4432d; }
+.btn-sm { padding: 5px 11px; font-size: 12px; }
+.btn-ghost { background: transparent; border-color: transparent; color: rgba(255,255,255,0.75); }
+.btn-ghost:hover { background: rgba(255,255,255,0.1); color: var(--white); border-color: transparent; }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
+/* ── Forms ───────────────────────────────────────────────── */
 .form-group { margin-bottom: 1rem; }
-.form-label { display: block; font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 5px; }
-input[type=text], input[type=email], input[type=number], input[type=date], input[type=password], select, textarea {
-  width: 100%; padding: 8px 11px; border: 1px solid var(--border); border-radius: var(--radius);
-  font-size: 13.5px; font-family: var(--font); background: var(--card); color: var(--text);
-  transition: border-color 0.15s;
+.form-label {
+  display: block;
+  font-family: var(--font-head);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--blue);
+  margin-bottom: 5px;
 }
-input:focus, select:focus, textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+input[type=text], input[type=email], input[type=number],
+input[type=date], input[type=password], select, textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 14px;
+  background: var(--white);
+  color: var(--carbon);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--pacific);
+  box-shadow: 0 0 0 3px rgba(78,165,192,0.15);
+}
+input:disabled { background: var(--bg); opacity: 0.7; }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
-.flex-row { display: flex; gap: 10px; align-items: center; }
-.flex-sb  { display: flex; justify-content: space-between; align-items: center; }
 
-.alert { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: var(--radius); font-size: 13.5px; margin-bottom: 1rem; }
-.alert i { margin-top: 1px; flex-shrink: 0; }
-.alert-warning { background: var(--amber-lt); color: #92400e; border: 1px solid #fde68a; }
-.alert-success { background: var(--green-lt); color: #14532d; border: 1px solid #bbf7d0; }
-.alert-info    { background: var(--blue-lt);  color: #1e3a8a; border: 1px solid #bfdbfe; }
+/* ── Alerts ──────────────────────────────────────────────── */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  margin-bottom: 1.25rem;
+  border-left: 4px solid;
+}
+.alert i { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.alert-warning { background: var(--saffron-lt); color: #6b4c00; border-color: var(--saffron); }
+.alert-warning i { color: var(--saffron); }
+.alert-success  { background: #e8f5f0; color: #1a5c30; border-color: #4caf50; }
+.alert-success i { color: #4caf50; }
+.alert-info     { background: var(--pacific-lt); color: #0d5a72; border-color: var(--pacific); }
+.alert-info i   { color: var(--pacific); }
 
-.tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem; gap: 0; }
-.tab { padding: 9px 16px; font-size: 13.5px; cursor: pointer; color: var(--slate); border-bottom: 2px solid transparent; margin-bottom: -1px; font-weight: 500; }
-.tab:hover { color: var(--text); }
-.tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+/* ── Tabs ────────────────────────────────────────────────── */
+.tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; gap: 0; }
+.tab {
+  padding: 9px 18px;
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--slate);
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.15s;
+}
+.tab:hover { color: var(--blue); }
+.tab.active { color: var(--terracotta); border-bottom-color: var(--terracotta); }
 
-.saldo-hero { text-align: center; padding: 2rem; }
-.saldo-num { font-size: 64px; font-weight: 800; color: var(--blue); line-height: 1; }
-.saldo-label { font-size: 16px; color: var(--slate); margin-top: 6px; }
+/* ── Page header ─────────────────────────────────────────── */
+.page-header { margin-bottom: 1.75rem; }
+.ph-row { display: flex; justify-content: space-between; align-items: flex-start; }
+.ph-divider {
+  height: 3px;
+  width: 40px;
+  background: var(--terracotta);
+  border-radius: 2px;
+  margin-top: 8px;
+}
 
-.week-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; }
-.week-day { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
-.week-day.present { background: var(--green-lt); border-color: #bbf7d0; }
-.week-day .wd-name { font-size: 10.5px; color: var(--muted); text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; }
-.week-day .wd-num  { font-size: 20px; font-weight: 700; margin: 4px 0; }
-.week-day .wd-icon { font-size: 16px; }
+/* ── Saldo hero ──────────────────────────────────────────── */
+.saldo-hero {
+  text-align: center;
+  padding: 2.5rem 1rem;
+}
+.saldo-ring {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 6px solid var(--pacific);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  background: var(--blue-lt);
+}
+.saldo-num   { font-family: var(--font-head); font-size: 48px; font-weight: 700; color: var(--blue); line-height: 1; }
+.saldo-label { font-family: var(--font-body); font-size: 12px; color: var(--slate); margin-top: 2px; }
 
-/* Modal */
-.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 1rem; }
-.modal { background: var(--card); border-radius: 16px; padding: 1.5rem; width: 500px; max-width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
-.modal h3 { font-size: 17px; font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px; }
-.modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.25rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+/* ── Week grid ───────────────────────────────────────────── */
+.week-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
+.week-day {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 8px;
+  text-align: center;
+  transition: border-color 0.15s;
+}
+.week-day.present {
+  background: #e8f5f0;
+  border-color: #a3d9b8;
+}
+.wd-name { font-family: var(--font-head); font-size: 10px; font-weight: 600; color: var(--slate); text-transform: uppercase; letter-spacing: 0.06em; }
+.wd-num  { font-family: var(--font-head); font-size: 20px; font-weight: 700; color: var(--blue); margin: 4px 0; }
+.wd-icon { font-size: 16px; }
 
-/* Login */
-.login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg); }
-.login-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; width: 380px; max-width: 90vw; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
-.login-logo { text-align: center; margin-bottom: 1.75rem; }
-.login-logo i { font-size: 36px; color: var(--blue); }
-.login-logo h1 { font-size: 20px; font-weight: 700; margin-top: 6px; }
-.login-logo p  { font-size: 13px; color: var(--slate); margin-top: 4px; }
-.divider { text-align: center; color: var(--muted); font-size: 12px; margin: 1rem 0; display: flex; align-items: center; gap: 10px; }
-.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+/* ── Carnet cards ────────────────────────────────────────── */
+.carnet-options { display: flex; flex-direction: column; gap: 12px; }
+.carnet-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.125rem 1.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  cursor: pointer;
+}
+.carnet-card:hover { border-color: var(--pacific); box-shadow: var(--shadow-md); }
+.carnet-card.best { border-color: var(--pacific); position: relative; }
+.carnet-best-tag {
+  position: absolute;
+  top: -10px; right: 16px;
+  background: var(--pacific);
+  color: var(--white);
+  font-family: var(--font-head);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 99px;
+}
+.carnet-pasti { font-family: var(--font-head); font-size: 22px; font-weight: 700; color: var(--blue); }
+.carnet-sub   { font-family: var(--font-body); font-size: 12.5px; color: var(--slate); margin-top: 2px; }
+.carnet-price { font-family: var(--font-head); font-size: 26px; font-weight: 700; color: var(--terracotta); }
+
+/* ── Modal ───────────────────────────────────────────────── */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(11,57,84,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+  backdrop-filter: blur(2px);
+}
+.modal {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 1.75rem;
+  width: 520px;
+  max-width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 64px rgba(11,57,84,0.25);
+}
+.modal h3 {
+  font-family: var(--font-head);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 1.375rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.modal h3 i { color: var(--terracotta); }
+.modal-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 1.375rem;
+  padding-top: 1.125rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Login ───────────────────────────────────────────────── */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  background: var(--blue);
+}
+.login-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.login-left::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: rgba(78,165,192,0.1);
+}
+.login-left::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: -60px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: rgba(233,79,55,0.08);
+}
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
+}
+.login-brand-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--terracotta);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-brand-icon i { font-size: 28px; color: var(--white); }
+.login-brand-name { font-family: var(--font-head); font-size: 18px; font-weight: 700; color: var(--white); line-height: 1.2; }
+.login-brand-sub  { font-family: var(--font-body); font-size: 12px; color: var(--pacific); }
+.login-headline {
+  font-family: var(--font-head);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+.login-headline span { color: var(--saffron); }
+.login-tagline {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.6;
+  max-width: 380px;
+  position: relative;
+  z-index: 1;
+}
+.login-sedi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2.5rem;
+  position: relative;
+  z-index: 1;
+}
+.login-sede-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.8);
+  font-family: var(--font-body);
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 99px;
+}
+.login-right {
+  width: 440px;
+  flex-shrink: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.login-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 2rem;
+  width: 100%;
+  box-shadow: var(--shadow-md);
+}
+.login-card-title {
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 4px;
+}
+.login-card-sub {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--slate);
+  margin-bottom: 1.75rem;
+}
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 1.125rem 0;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--slate);
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
 .demo-btns { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
 
-/* Toast */
-#toast { position: fixed; bottom: 20px; right: 20px; z-index: 999; padding: 11px 16px; border-radius: var(--radius); font-size: 13.5px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); transition: opacity 0.25s; pointer-events: none; }
+/* ── Toast ───────────────────────────────────────────────── */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+  padding: 12px 18px;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  display: none;
+  align-items: center;
+  gap: 9px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+  max-width: 340px;
+}
 
-/* Carnet cards */
-.carnet-options { display: flex; flex-direction: column; gap: 10px; }
-.carnet-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; }
-.carnet-card:hover { border-color: var(--blue); }
-.carnet-pasti { font-size: 22px; font-weight: 700; }
-.carnet-sub   { font-size: 12px; color: var(--slate); }
-.carnet-price { font-size: 24px; font-weight: 800; color: var(--blue); }
-
-/* Spinner */
-.spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.6s linear infinite; }
+/* ── Spinner ─────────────────────────────────────────────── */
+.spinner {
+  display: inline-block;
+  width: 20px; height: 20px;
+  border: 2.5px solid var(--border);
+  border-top-color: var(--pacific);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
 @keyframes spin { to { transform: rotate(360deg); } }
+.loading { display: flex; align-items: center; justify-content: center; padding: 3rem; gap: 12px; color: var(--slate); font-family: var(--font-body); }
 
-/* Responsive */
-@media (max-width: 700px) {
+/* ── Utilities ───────────────────────────────────────────── */
+.flex-row { display: flex; gap: 10px; align-items: center; }
+.flex-sb  { display: flex; justify-content: space-between; align-items: center; }
+.mt-1 { margin-top: .75rem; }
+.mt-2 { margin-top: 1.5rem; }
+.fw-bold { font-weight: 600; }
+.text-blue   { color: var(--blue); }
+.text-slate  { color: var(--slate); }
+.text-terra  { color: var(--terracotta); }
+.text-sm { font-size: 12.5px; }
+.info-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; }
+.info-item .info-label { font-family: var(--font-head); font-size: 11px; font-weight: 600; color: var(--slate); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+.info-item .info-val   { font-family: var(--font-body); font-size: 14px; color: var(--carbon); }
+.section-label {
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: .625rem;
+}
+.avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--blue-lt);
+  color: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.iban-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.125rem;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  line-height: 1.9;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
   .sidebar { display: none; }
   .metrics { grid-template-columns: 1fr 1fr; }
   .grid2 { grid-template-columns: 1fr; }
+  .login-left { display: none; }
+  .login-right { width: 100%; }
 }
 </style>
 </head>
 <body>
 <div id="app"></div>
 <div id="modal-root"></div>
-<div id="toast" style="display:none"></div>
+<div id="toast"></div>
 
 <script>
-// ============================================================
-// Config
-// ============================================================
-const API = 'https://doposcuola-api.giulio-asta-2a5.workers.dev/api'; // Cloudflare Pages proxia automaticamente verso il Worker
+// ── Config ────────────────────────────────────────────────
+const API = 'https://doposcuola-api.giulio-asta-2a5.workers.dev/api';
 
-// ============================================================
-// State
-// ============================================================
-const S = {
-  user: null,
-  token: null,
-  page: null,
-  sedi: [],
-  cache: {},
-};
+// ── State ─────────────────────────────────────────────────
+const S = { user: null, token: null, page: null };
+const _presenze = {};
 
-// ============================================================
-// API client
-// ============================================================
+// ── API client ────────────────────────────────────────────
 async function api(method, path, body) {
-  const opts = {
-    method,
-    headers: { 'Content-Type': 'application/json' },
-  };
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
   if (S.token) opts.headers['Authorization'] = `Bearer ${S.token}`;
-  if (body)    opts.body = JSON.stringify(body);
-
+  if (body) opts.body = JSON.stringify(body);
   const res = await fetch(API + path, opts);
   if (res.status === 401) { logout(); return null; }
-
   const ct = res.headers.get('Content-Type') || '';
-  if (ct.includes('text/csv')) return res; // restituisce Response per CSV
-
+  if (ct.includes('text/csv')) return res;
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Errore');
   return data;
 }
 
-// ============================================================
-// Auth
-// ============================================================
+// ── Boot ──────────────────────────────────────────────────
 async function boot() {
-  // Controlla magic link nel query string
   const params = new URLSearchParams(location.search);
-  const token  = params.get('token');
+  const token = params.get('token');
   if (token) {
     history.replaceState(null, '', location.pathname);
     try {
@@ -217,108 +719,78 @@ async function boot() {
       if (data) { doLogin(data); return; }
     } catch(e) { toast('Link non valido o scaduto', 'danger'); }
   }
-
-  // Controlla sessione salvata
   const saved = sessionStorage.getItem('auth');
   if (saved) {
-    const { user, token } = JSON.parse(saved);
-    S.user = user; S.token = token;
-    renderApp();
-    return;
+    const parsed = JSON.parse(saved);
+    S.user = parsed.user; S.token = parsed.token;
+    renderApp(); return;
   }
   renderLogin();
 }
 
 function doLogin(data) {
-  S.user  = data.user;
-  S.token = data.token;
+  S.user = data.user; S.token = data.token;
   sessionStorage.setItem('auth', JSON.stringify({ user: S.user, token: S.token }));
   renderApp();
 }
 
 function logout() {
-  S.user = null; S.token = null; S.cache = {};
+  S.user = null; S.token = null;
   sessionStorage.removeItem('auth');
   renderLogin();
 }
 
-// Demo login (bypassa API per sviluppo locale senza backend)
 function demoLogin(role) {
   const users = {
-    admin:    { id: 'demo-admin', name: 'Admin Demo', email: 'admin@officina.it', role: 'admin' },
-    genitore: { id: 'demo-g1',    name: 'Marco Martini', email: 'marco@esempio.it', role: 'genitore' },
-    operatore:{ id: 'demo-op1',   name: 'Sara Educatore', email: 'sara@officina.it', role: 'operatore', sede: 'orsini' },
+    admin:     { id:'demo-admin', name:'Admin Demo',    email:'admin@officina.it',    role:'admin' },
+    genitore:  { id:'demo-g1',   name:'Marco Martini', email:'marco@esempio.it',     role:'genitore' },
+    operatore: { id:'demo-op1',  name:'Sara Laderchi', email:'sara@officina.it',     role:'operatore', sede:'orsini' },
   };
   doLogin({ user: users[role], token: 'demo-token' });
 }
 
-// ============================================================
-// Render helpers
-// ============================================================
-function r(html) {
-  document.getElementById('app').innerHTML = html;
-}
-
-function setContent(html) {
-  document.getElementById('content').innerHTML = html;
-}
-
-function navigate(page) {
-  S.page = page;
-  renderSidebar();
-  const pages = {
-    // admin
-    dashboard: pageDashboard,
-    iscritti:  pageIscritti,
-    'pres-admin': pagePresenzeAdmin,
-    pagamenti: pagePagamenti,
-    operatori: pageOperatori,
-    export:    pageExport,
-    // genitore
-    saldo:     pageSaldo,
-    carnet:    pageCarnet,
-    scheda:    pageScheda,
-    'pres-genitore': pagePresenzeGenitore,
-    // operatore
-    presenze:  pagePresenze,
-    pasti:     pagePasti,
-    'bambini-op': pageBambiniOp,
-    // common
-    impostazioni: pageImpostazioni,
-  };
-  if (pages[page]) pages[page]();
-}
-
-// ============================================================
-// Login page
-// ============================================================
+// ── Login page ────────────────────────────────────────────
 function renderLogin() {
   document.getElementById('app').innerHTML = `
     <div class="login-page">
-      <div class="login-card">
-        <div class="login-logo">
-          <i class="ti ti-school"></i>
-          <h1>Officina Immaginata</h1>
-          <p>Gestione Doposcuola — Imola</p>
+      <div class="login-left">
+        <div class="login-brand">
+          <div class="login-brand-icon"><i class="ti ti-school"></i></div>
+          <div>
+            <div class="login-brand-name">Officina Immaginata</div>
+            <div class="login-brand-sub">Cooperativa Sociale · Imola</div>
+          </div>
         </div>
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input type="email" id="login-email" placeholder="nome@esempio.it" autocomplete="email">
+        <div class="login-headline">Gestione<br>Doposcuola <span>2025/26</span></div>
+        <div class="login-tagline">Piattaforma per la gestione dei pasti, delle presenze e degli abbonamenti dei servizi di doposcuola.</div>
+        <div class="login-sedi">
+          ${['Orsini','Sante Zennaro','Valsalva','Campanella'].map(s=>`
+            <div class="login-sede-chip"><i class="ti ti-map-pin" style="font-size:12px"></i>${s}</div>
+          `).join('')}
         </div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="handleMagicLink()">
-            <i class="ti ti-mail"></i> Ricevi magic link
+      </div>
+      <div class="login-right">
+        <div class="login-card">
+          <div class="login-card-title">Bentornato/a</div>
+          <div class="login-card-sub">Inserisci la tua email per ricevere il link di accesso.</div>
+          <div class="form-group">
+            <label class="form-label">Indirizzo email</label>
+            <input type="email" id="login-email" placeholder="nome@esempio.it" autocomplete="email">
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;padding:10px" onclick="handleMagicLink()">
+            <i class="ti ti-mail"></i> Ricevi link di accesso
           </button>
-        </div>
-        <div style="margin-top:1.25rem;text-align:center;font-size:13px;color:var(--slate)">
-          Non hai un account? <a href="#" onclick="modalRegister();return false" style="color:var(--blue);font-weight:500">Registrati</a>
-        </div>
-        <div style="margin-top:1.5rem;border-top:1px solid var(--border);padding-top:1.25rem">
-          <p style="font-size:11.5px;color:var(--muted);text-align:center;margin-bottom:8px">Demo rapida:</p>
-          <div class="demo-btns">
-            <button class="btn btn-sm" onclick="demoLogin('admin')"><i class="ti ti-shield"></i> Admin</button>
-            <button class="btn btn-sm" onclick="demoLogin('genitore')"><i class="ti ti-users"></i> Genitore</button>
-            <button class="btn btn-sm" onclick="demoLogin('operatore')"><i class="ti ti-school"></i> Operatore</button>
+          <div class="divider">oppure</div>
+          <div style="text-align:center;font-size:13.5px;color:var(--slate)">
+            Prima volta? <a href="#" onclick="modalRegister();return false" style="color:var(--terracotta);font-weight:600">Crea il tuo account</a>
+          </div>
+          <div style="margin-top:1.75rem;border-top:1px solid var(--border);padding-top:1.25rem">
+            <div style="font-size:11.5px;color:var(--slate);text-align:center;margin-bottom:8px;font-family:var(--font-head);letter-spacing:0.03em">ACCESSO DEMO</div>
+            <div class="demo-btns">
+              <button class="btn btn-sm" onclick="demoLogin('admin')"><i class="ti ti-shield-check"></i> Admin</button>
+              <button class="btn btn-sm" onclick="demoLogin('genitore')"><i class="ti ti-users"></i> Genitore</button>
+              <button class="btn btn-sm" onclick="demoLogin('operatore')"><i class="ti ti-school"></i> Operatore</button>
+            </div>
           </div>
         </div>
       </div>
@@ -331,19 +803,20 @@ async function handleMagicLink() {
   if (!email) { toast('Inserisci la tua email', 'warning'); return; }
   try {
     await api('POST', '/auth/magic-link', { email });
-    toast('Magic link inviato! Controlla la tua email.', 'success');
+    toast('Link inviato! Controlla la tua email.', 'success');
   } catch(e) { toast(e.message, 'danger'); }
 }
 
 function modalRegister() {
   showModal(`
-    <h3><i class="ti ti-user-plus"></i> Crea account</h3>
+    <h3><i class="ti ti-user-plus"></i> Crea il tuo account</h3>
     <div class="grid2">
-      <div class="form-group"><label class="form-label">Tuo nome</label><input type="text" id="r-name" placeholder="Mario Rossi"></div>
+      <div class="form-group"><label class="form-label">Nome e cognome</label><input type="text" id="r-name" placeholder="Mario Rossi"></div>
       <div class="form-group"><label class="form-label">Email</label><input type="email" id="r-email" placeholder="email@esempio.it"></div>
     </div>
-    <div class="form-group"><label class="form-label">Sede</label>
-      <select id="r-sede"><option value="">-- Seleziona --</option>
+    <div class="form-group"><label class="form-label">Sede doposcuola</label>
+      <select id="r-sede">
+        <option value="">-- Seleziona la sede --</option>
         <option value="orsini">Orsini — IC7 Via Vivaldi 76</option>
         <option value="zennaro">Sante Zennaro — IC5 Via Pirandello 12</option>
         <option value="valsalva">Valsalva — IC4 Via Guicciardini 8</option>
@@ -352,66 +825,72 @@ function modalRegister() {
     </div>
     <div class="form-group"><label class="form-label">Orario frequenza</label>
       <select id="r-orario">
-        <option value="13:00-17:00">13:00–17:00 (€190/mese)</option>
-        <option value="14:00-17:00">14:00–17:00 (€150/mese)</option>
-        <option value="12:45-16:45">12:45–16:45 (€75/mese)</option>
+        <option value="13:00-17:00">13:00–17:00 · €190/mese</option>
+        <option value="14:00-17:00">14:00–17:00 · €150/mese</option>
+        <option value="12:45-16:45">12:45–16:45 · €75/mese</option>
       </select>
     </div>
     <div class="grid2">
       <div class="form-group"><label class="form-label">Nome bambino/a</label><input type="text" id="r-bnome" placeholder="Nome"></div>
-      <div class="form-group"><label class="form-label">Cognome bambino/a</label><input type="text" id="r-bcognome" placeholder="Cognome"></div>
+      <div class="form-group"><label class="form-label">Cognome</label><input type="text" id="r-bcognome" placeholder="Cognome"></div>
     </div>
     <div class="form-group"><label class="form-label">Classe</label><input type="text" id="r-classe" placeholder="es. 3ª elementare"></div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal()">Annulla</button>
-      <button class="btn btn-primary" onclick="doRegister()">Registrati</button>
+      <button class="btn btn-primary" onclick="doRegister()"><i class="ti ti-check"></i> Registrati</button>
     </div>
   `);
 }
 
 async function doRegister() {
   const body = {
-    name:           document.getElementById('r-name').value,
-    email:          document.getElementById('r-email').value,
-    sede_id:        document.getElementById('r-sede').value,
-    orario:         document.getElementById('r-orario').value,
-    nome_bambino:   document.getElementById('r-bnome').value,
-    cognome_bambino:document.getElementById('r-bcognome').value,
-    classe:         document.getElementById('r-classe').value,
+    name: document.getElementById('r-name').value,
+    email: document.getElementById('r-email').value,
+    sede_id: document.getElementById('r-sede').value,
+    orario: document.getElementById('r-orario').value,
+    nome_bambino: document.getElementById('r-bnome').value,
+    cognome_bambino: document.getElementById('r-bcognome').value,
+    classe: document.getElementById('r-classe').value,
   };
   try {
     await api('POST', '/auth/register', body);
     closeModal();
-    toast('Registrazione completata! Controlla la tua email per accedere.', 'success');
+    toast('Registrazione completata! Controlla la tua email.', 'success');
   } catch(e) { toast(e.message, 'danger'); }
 }
 
-// ============================================================
-// Main app shell
-// ============================================================
+// ── App shell ─────────────────────────────────────────────
 function renderApp() {
   const u = S.user;
-  const roleLabel = { admin: 'Amministratore', genitore: 'Genitore', operatore: 'Operatore' };
+  const roleLabel = { admin:'Amministratore', genitore:'Genitore', operatore:'Operatore' };
   document.getElementById('app').innerHTML = `
-    <div id="topbar" class="topbar">
-      <div class="topbar-brand"><i class="ti ti-school"></i> Officina Immaginata</div>
-      <div class="topbar-right">
-        <span class="user-chip">
-          <i class="ti ti-user-circle" style="font-size:18px"></i>
-          ${u.name}
-          <span class="role-pill role-${u.role}">${roleLabel[u.role]}</span>
-        </span>
-        <button class="btn btn-sm" onclick="logout()"><i class="ti ti-logout"></i> Esci</button>
+    <div style="display:flex;flex-direction:column;min-height:100vh">
+      <div class="topbar">
+        <div class="topbar-brand">
+          <div class="brand-icon"><i class="ti ti-school"></i></div>
+          <div class="brand-text">
+            <div class="brand-name">Officina Immaginata</div>
+            <div class="brand-sub">Gestione Doposcuola</div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="user-info">
+            <span class="user-name">${u.name}</span>
+            <span class="role-pill role-${u.role}">${roleLabel[u.role]}</span>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="logout()"><i class="ti ti-logout"></i> Esci</button>
+        </div>
+      </div>
+      <div class="body">
+        <nav class="sidebar" id="sidebar"></nav>
+        <main class="content" id="content">
+          <div class="loading"><div class="spinner"></div> Caricamento...</div>
+        </main>
       </div>
     </div>
-    <div class="body">
-      <nav class="sidebar" id="sidebar"></nav>
-      <main class="content" id="content"><div style="text-align:center;padding:3rem"><div class="spinner"></div></div></main>
-    </div>
   `;
-
-  const defaultPage = { admin: 'dashboard', genitore: 'saldo', operatore: 'presenze' };
-  navigate(defaultPage[u.role]);
+  const defaults = { admin:'dashboard', genitore:'saldo', operatore:'presenze' };
+  navigate(defaults[u.role]);
 }
 
 function renderSidebar() {
@@ -427,62 +906,102 @@ function renderSidebar() {
     ],
     genitore: [
       { icon:'ti-wallet',           label:'Saldo pasti',  page:'saldo' },
-      { icon:'ti-ticket',           label:'Carnet',       page:'carnet' },
+      { icon:'ti-ticket',           label:'Carnet pasti', page:'carnet' },
       { icon:'ti-id-badge',         label:'Scheda',       page:'scheda' },
       { icon:'ti-calendar',         label:'Presenze',     page:'pres-genitore' },
       { icon:'ti-settings',         label:'Impostazioni', page:'impostazioni' },
     ],
     operatore: [
       { icon:'ti-calendar-check',   label:'Presenze',     page:'presenze' },
-      { icon:'ti-soup',             label:'Pasti',        page:'pasti' },
+      { icon:'ti-soup',             label:'Registro pasti',page:'pasti' },
       { icon:'ti-users',            label:'Bambini',      page:'bambini-op' },
       { icon:'ti-settings',         label:'Impostazioni', page:'impostazioni' },
     ],
   };
-
-  const items = navs[S.user.role] || [];
-  document.getElementById('sidebar').innerHTML = items.map(n => `
-    <div class="nav-item ${S.page === n.page ? 'active' : ''}" onclick="navigate('${n.page}')">
+  document.getElementById('sidebar').innerHTML = navs[S.user.role].map(n => `
+    <div class="nav-item ${S.page===n.page?'active':''}" onclick="navigate('${n.page}')">
       <i class="ti ${n.icon}"></i> ${n.label}
     </div>
   `).join('');
 }
 
-// ============================================================
-// Pages — Admin
-// ============================================================
-async function pageDashboard() {
-  setContent('<div style="text-align:center;padding:3rem"><div class="spinner"></div></div>');
-  // Per demo usiamo dati simulati; in produzione si farebbe una chiamata API di aggregazione
-  const bambini = await getBambiniDemo();
-  const saldoBasso = bambini.filter(b => b.saldo_pasti < 5).length;
+function navigate(page) {
+  S.page = page;
+  renderSidebar();
+  const pages = {
+    dashboard:'pageDashboard', iscritti:'pageIscritti', 'pres-admin':'pagePresenzeAdmin',
+    pagamenti:'pagePagamenti', operatori:'pageOperatori', export:'pageExport',
+    saldo:'pageSaldo', carnet:'pageCarnet', scheda:'pageScheda', 'pres-genitore':'pagePresenzeGenitore',
+    presenze:'pagePresenze', pasti:'pagePasti', 'bambini-op':'pageBambiniOp',
+    impostazioni:'pageImpostazioni',
+  };
+  if (pages[page]) window[pages[page]]();
+}
 
+function setContent(html) { document.getElementById('content').innerHTML = html; }
+function loading() { setContent('<div class="loading"><div class="spinner"></div> Caricamento...</div>'); }
+
+// ── Demo data ─────────────────────────────────────────────
+async function getBambini() {
+  if (S.token !== 'demo-token') {
+    try { const d = await api('GET','/bambini'); if(d) return d; } catch(e) {}
+  }
+  return [
+    {id:'b1',nome:'Sofia', cognome:'Martini', classe:'3ª elementare',sede_id:'orsini',    sede_nome:'Orsini',        orario:'13:00-17:00',genitore:'Marco Martini', email:'marco@esempio.it', saldo_pasti:12,pagato:true},
+    {id:'b2',nome:'Luca',  cognome:'Bianchi',  classe:'1ª media',     sede_id:'valsalva',  sede_nome:'Valsalva',      orario:'14:00-17:00',genitore:'Elena Bianchi', email:'elena@esempio.it', saldo_pasti:3, pagato:true},
+    {id:'b3',nome:'Giulia',cognome:'Rossi',    classe:'5ª elementare',sede_id:'orsini',    sede_nome:'Orsini',        orario:'13:00-17:00',genitore:'Franco Rossi',  email:'franco@esempio.it',saldo_pasti:0, pagato:false},
+    {id:'b4',nome:'Ahmed', cognome:'Tazi',     classe:'2ª media',     sede_id:'zennaro',   sede_nome:'Sante Zennaro', orario:'14:00-17:00',genitore:'Fatima Tazi',   email:'fatima@esempio.it',saldo_pasti:8, pagato:true},
+    {id:'b5',nome:'Chiara',cognome:'Verdi',    classe:'2ª elementare',sede_id:'campanella',sede_nome:'Campanella',    orario:'12:45-16:45',genitore:'Paolo Verdi',   email:'paolo@esempio.it', saldo_pasti:15,pagato:true},
+  ];
+}
+
+// ── Admin pages ───────────────────────────────────────────
+async function pageDashboard() {
+  loading();
+  const bb = await getBambini();
+  const saldoBasso = bb.filter(b=>b.saldo_pasti<5).length;
+  const sedi = [{id:'orsini',n:'Orsini'},{id:'zennaro',n:'Sante Zennaro'},{id:'valsalva',n:'Valsalva'},{id:'campanella',n:'Campanella'}];
   setContent(`
-    <div class="page-header"><h1>Dashboard</h1><p>Panoramica del servizio doposcuola</p></div>
-    ${saldoBasso > 0 ? `<div class="alert alert-warning"><i class="ti ti-alert-triangle"></i><div><strong>${saldoBasso} iscritto/i</strong> con meno di 5 pasti residui — notifica email inviata ai genitori.</div></div>` : ''}
+    <div class="page-header">
+      <div class="page-title">Dashboard</div>
+      <div class="page-sub">Panoramica del servizio doposcuola · Anno scolastico 2025/26</div>
+      <div class="ph-divider"></div>
+    </div>
+    ${saldoBasso>0?`<div class="alert alert-warning"><i class="ti ti-alert-triangle"></i><div><strong>${saldoBasso} iscritto/i</strong> con meno di 5 pasti residui — notifica email inviata ai genitori.</div></div>`:''}
     <div class="metrics">
-      <div class="metric"><div class="metric-label">Bambini iscritti</div><div class="metric-value">${bambini.length}</div><div class="metric-sub">su 4 sedi</div></div>
-      <div class="metric"><div class="metric-label">Pasti residui totali</div><div class="metric-value">${bambini.reduce((a,b)=>a+b.saldo_pasti,0)}</div><div class="metric-sub">in tutti i carnet</div></div>
-      <div class="metric"><div class="metric-label" style="color:var(--amber)">Saldo basso</div><div class="metric-value" style="color:var(--amber)">${saldoBasso}</div><div class="metric-sub">sotto 5 pasti</div></div>
-      <div class="metric"><div class="metric-label" style="color:var(--red)">Non pagati</div><div class="metric-value" style="color:var(--red)">${bambini.filter(b=>!b.pagato).length}</div><div class="metric-sub">abbonamenti</div></div>
+      <div class="metric accent">
+        <div class="metric-label">Bambini iscritti</div>
+        <div class="metric-value">${bb.length}</div>
+        <div class="metric-sub">su 4 sedi</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Pasti residui totali</div>
+        <div class="metric-value">${bb.reduce((a,b)=>a+b.saldo_pasti,0)}</div>
+        <div class="metric-sub">in tutti i carnet</div>
+      </div>
+      <div class="metric warn">
+        <div class="metric-label">Saldo basso</div>
+        <div class="metric-value" style="color:var(--saffron)">${saldoBasso}</div>
+        <div class="metric-sub">sotto 5 pasti</div>
+      </div>
+      <div class="metric danger">
+        <div class="metric-label">Abbonamenti scaduti</div>
+        <div class="metric-value" style="color:var(--terracotta)">${bb.filter(b=>!b.pagato).length}</div>
+        <div class="metric-sub">da rinnovare</div>
+      </div>
     </div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Sede</th><th>Iscritti</th><th>Pasti medi</th><th>Stato</th></tr></thead>
         <tbody>
-          ${[
-            {id:'orsini',nome:'Orsini'},
-            {id:'zennaro',nome:'Sante Zennaro'},
-            {id:'valsalva',nome:'Valsalva'},
-            {id:'campanella',nome:'Campanella'},
-          ].map(s => {
-            const bb = bambini.filter(b=>b.sede_id===s.id);
-            const avg = bb.length ? Math.round(bb.reduce((a,b)=>a+b.saldo_pasti,0)/bb.length) : 0;
+          ${sedi.map(s=>{
+            const bbs = bb.filter(b=>b.sede_id===s.id);
+            const avg = bbs.length ? Math.round(bbs.reduce((a,b)=>a+b.saldo_pasti,0)/bbs.length) : 0;
             return `<tr>
-              <td><strong>${s.nome}</strong></td>
-              <td>${bb.length}</td>
+              <td><span class="td-name">${s.n}</span></td>
+              <td>${bbs.length}</td>
               <td>${avg} pasti</td>
-              <td><span class="badge ${bb.length>=12?'badge-success':'badge-warning'}">${bb.length>=12?'Attivo':'In attesa (min. 12)'}</span></td>
+              <td><span class="badge ${bbs.length>=12?'badge-success':'badge-warning'}">${bbs.length>=12?'Attivo':'In attesa (min. 12)'}</span></td>
             </tr>`;
           }).join('')}
         </tbody>
@@ -492,26 +1011,38 @@ async function pageDashboard() {
 }
 
 async function pageIscritti() {
-  setContent('<div style="text-align:center;padding:3rem"><div class="spinner"></div></div>');
-  const bambini = await getBambiniDemo();
+  loading();
+  const bb = await getBambini();
   setContent(`
     <div class="page-header">
       <div class="ph-row">
-        <div><h1>Iscritti</h1><p>Tutte le schede degli iscritti al doposcuola</p></div>
+        <div>
+          <div class="page-title">Iscritti</div>
+          <div class="page-sub">Schede di tutti gli iscritti al doposcuola</div>
+          <div class="ph-divider"></div>
+        </div>
         <button class="btn btn-primary" onclick="modalNuovoIscritto()"><i class="ti ti-plus"></i> Nuovo iscritto</button>
       </div>
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Bambino/a</th><th>Sede</th><th>Saldo pasti</th><th>Abbonamento</th><th>Stato</th><th></th></tr></thead>
+        <thead><tr><th>Bambino/a</th><th>Sede</th><th>Saldo pasti</th><th>Orario</th><th>Abbonamento</th><th></th></tr></thead>
         <tbody>
-          ${bambini.map(b => `<tr>
-            <td><strong>${b.nome} ${b.cognome}</strong><br><span style="font-size:12px;color:var(--slate)">${b.genitore} · ${b.classe}</span></td>
-            <td>${b.sede_nome}</td>
+          ${bb.map(b=>`<tr>
+            <td>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="avatar">${b.nome[0]}${b.cognome[0]}</div>
+                <div>
+                  <div class="td-name">${b.nome} ${b.cognome}</div>
+                  <div class="td-sub">${b.genitore} · ${b.classe}</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge badge-pacific">${b.sede_nome}</span></td>
             <td><span class="badge ${b.saldo_pasti===0?'badge-danger':b.saldo_pasti<5?'badge-warning':'badge-success'}">${b.saldo_pasti} pasti</span></td>
-            <td>${b.orario}</td>
+            <td style="color:var(--slate);font-size:13px">${b.orario}</td>
             <td><span class="badge ${b.pagato?'badge-success':'badge-danger'}">${b.pagato?'Attivo':'Da rinnovare'}</span></td>
-            <td><button class="btn btn-sm" onclick="modalScheda(${JSON.stringify(b).replace(/"/g,'&quot;')})"><i class="ti ti-eye"></i></button></td>
+            <td><button class="btn btn-sm" onclick='modalScheda(${JSON.stringify(b).replace(/'/g,"&#39;")})'><i class="ti ti-eye"></i></button></td>
           </tr>`).join('')}
         </tbody>
       </table>
@@ -520,107 +1051,107 @@ async function pageIscritti() {
 }
 
 async function pagePresenzeAdmin() {
-  setContent('<div style="text-align:center;padding:3rem"><div class="spinner"></div></div>');
+  loading();
   const oggi = new Date().toISOString().split('T')[0];
+  const sedi = [{id:'orsini',n:'Orsini'},{id:'zennaro',n:'Sante Zennaro'},{id:'valsalva',n:'Valsalva'},{id:'campanella',n:'Campanella'}];
   setContent(`
-    <div class="page-header"><h1>Registro presenze</h1><p>Data: ${formatData(oggi)}</p></div>
-    <div class="tabs" id="sede-tabs">
-      ${['orsini','zennaro','valsalva','campanella'].map((s,i)=>
-        `<div class="tab ${i===0?'active':''}" onclick="loadPresenzeAdmin('${s}',this)">${capitalise(s)}</div>`
-      ).join('')}
+    <div class="page-header">
+      <div class="page-title">Registro presenze</div>
+      <div class="page-sub">${formatData(oggi)}</div>
+      <div class="ph-divider"></div>
     </div>
-    <div id="presenze-content"><div style="text-align:center;padding:2rem"><div class="spinner"></div></div></div>
+    <div class="tabs" id="sede-tabs">
+      ${sedi.map((s,i)=>`<div class="tab ${i===0?'active':''}" onclick="loadPresenzeTab('${s.id}',this)">${s.n}</div>`).join('')}
+    </div>
+    <div id="presenze-content"><div class="loading"><div class="spinner"></div></div></div>
   `);
-  loadPresenzeAdmin('orsini', document.querySelector('.tab.active'));
+  loadPresenzeTab('orsini', document.querySelector('.tab.active'));
 }
 
-async function loadPresenzeAdmin(sedeId, tabEl) {
+async function loadPresenzeTab(sedeId, tabEl) {
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   if (tabEl) tabEl.classList.add('active');
-  const bambini = (await getBambiniDemo()).filter(b=>b.sede_id===sedeId);
+  const bb = (await getBambini()).filter(b=>b.sede_id===sedeId);
   const oggi = new Date().toISOString().split('T')[0];
-
-  document.getElementById('presenze-content').innerHTML = bambini.length === 0
-    ? '<p style="color:var(--slate);padding:2rem">Nessun iscritto per questa sede.</p>'
+  document.getElementById('presenze-content').innerHTML = bb.length===0
+    ? '<div class="card" style="text-align:center;padding:2rem;color:var(--slate)"><i class="ti ti-users" style="font-size:32px;display:block;margin-bottom:8px"></i>Nessun iscritto per questa sede</div>'
     : `<div class="table-wrap"><table>
-        <thead><tr><th>Bambino/a</th><th>Oggi</th><th>Pasto</th><th>Saldo</th></tr></thead>
-        <tbody>${bambini.map(b=>`<tr id="pr-${b.id}">
-          <td><strong>${b.nome} ${b.cognome}</strong><br><span style="font-size:12px;color:var(--slate)">${b.classe}</span></td>
-          <td><button class="btn btn-sm" id="btn-p-${b.id}" onclick="togglePres('${b.id}','${sedeId}',this)">${presenza(b.id)?'<i class=\"ti ti-check\"></i> Presente':'Assente'}</button></td>
-          <td><button class="btn btn-sm" id="btn-pa-${b.id}" onclick="togglePasto('${b.id}','${sedeId}',this)" ${!presenza(b.id)?'disabled':''}>${pasto(b.id)?'<i class=\"ti ti-soup\"></i> Segnato':'Segna pasto'}</button></td>
+        <thead><tr><th>Bambino/a</th><th>Presente oggi</th><th>Pasto mensa</th><th>Saldo residuo</th></tr></thead>
+        <tbody>${bb.map(b=>`<tr>
+          <td><div class="td-name">${b.nome} ${b.cognome}</div><div class="td-sub">${b.classe}</div></td>
+          <td><button class="btn btn-sm ${presenza(b.id)?'btn-accent':''}" id="btn-p-${b.id}" onclick="togglePres('${b.id}','${sedeId}',this,'btn-p-','btn-pa-')">${presenza(b.id)?'<i class="ti ti-check"></i> Presente':'Assente'}</button></td>
+          <td><button class="btn btn-sm ${pasto(b.id)?'btn-primary':''}" id="btn-pa-${b.id}" onclick="togglePasto('${b.id}','saldo-${b.id}',this)" ${!presenza(b.id)?'disabled':''}>${pasto(b.id)?'<i class="ti ti-soup"></i> Segnato':'Segna pasto'}</button></td>
           <td><span class="badge ${b.saldo_pasti<5?'badge-warning':'badge-neutral'}" id="saldo-${b.id}">${b.saldo_pasti}</span></td>
         </tr>`).join('')}</tbody>
-      </table></div>`;
+      </table></div>
+      <div style="display:flex;justify-content:flex-end;margin-top:1rem">
+        <button class="btn btn-primary" onclick="toast('Registro salvato','success')"><i class="ti ti-device-floppy"></i> Salva registro</button>
+      </div>`;
 }
 
-// Stato locale presenze (in produzione: sincronizzato con API)
-const _presenze = {};
-function presenza(id) { return _presenze[id]?.presente || false; }
-function pasto(id)    { return _presenze[id]?.pasto || false; }
+function presenza(id) { return _presenze[id]?.presente||false; }
+function pasto(id)    { return _presenze[id]?.pasto||false; }
 
-function togglePres(id, sede, btn) {
-  if (!_presenze[id]) _presenze[id] = {};
+function togglePres(id, sede, btn, pfx, papfx) {
+  if (!_presenze[id]) _presenze[id]={};
   _presenze[id].presente = !_presenze[id].presente;
-  if (!_presenze[id].presente) _presenze[id].pasto = false;
-  btn.innerHTML = _presenze[id].presente ? '<i class="ti ti-check"></i> Presente' : 'Assente';
-  btn.className = 'btn btn-sm' + (_presenze[id].presente ? ' btn-success' : '');
-  const paBtn = document.getElementById('btn-pa-'+id);
-  if (paBtn) paBtn.disabled = !_presenze[id].presente;
-  // sync API
-  api('POST', '/presenze', { bambino_id: id, data: new Date().toISOString().split('T')[0], presente: _presenze[id].presente, pasto: false }).catch(()=>{});
+  if (!_presenze[id].presente) _presenze[id].pasto=false;
+  btn.innerHTML = _presenze[id].presente?'<i class="ti ti-check"></i> Presente':'Assente';
+  btn.className = 'btn btn-sm'+(_presenze[id].presente?' btn-accent':'');
+  const paBtn = document.getElementById((papfx||'btn-pa-')+id);
+  if (paBtn) { paBtn.disabled=!_presenze[id].presente; if(!_presenze[id].presente){paBtn.innerHTML='Segna pasto';paBtn.className='btn btn-sm';} }
+  api('POST','/presenze',{bambino_id:id,data:new Date().toISOString().split('T')[0],presente:_presenze[id].presente,pasto:false}).catch(()=>{});
 }
 
-function togglePasto(id, sede, btn) {
-  if (!_presenze[id]) _presenze[id] = {};
-  _presenze[id].pasto = !_presenze[id].pasto;
-  btn.innerHTML = _presenze[id].pasto ? '<i class="ti ti-soup"></i> Segnato' : 'Segna pasto';
-  btn.className = 'btn btn-sm' + (_presenze[id].pasto ? ' btn-success' : '');
-  const saldo = document.getElementById('saldo-'+id);
-  if (saldo) {
-    const n = parseInt(saldo.textContent) + (_presenze[id].pasto ? -1 : 1);
-    saldo.textContent = Math.max(0,n);
-    saldo.className = 'badge ' + (n < 5 ? 'badge-warning' : 'badge-neutral');
-  }
-  api('POST', '/presenze', { bambino_id: id, data: new Date().toISOString().split('T')[0], presente: true, pasto: _presenze[id].pasto }).catch(()=>{});
+function togglePasto(id, saldoId, btn) {
+  if (!_presenze[id]) _presenze[id]={};
+  _presenze[id].pasto=!_presenze[id].pasto;
+  btn.innerHTML=_presenze[id].pasto?'<i class="ti ti-soup"></i> Segnato':'Segna pasto';
+  btn.className='btn btn-sm'+(_presenze[id].pasto?' btn-primary':'');
+  const saldo=document.getElementById(saldoId);
+  if(saldo){const n=parseInt(saldo.textContent)+(_presenze[id].pasto?-1:1);saldo.textContent=Math.max(0,n);saldo.className='badge '+(n<5?'badge-warning':'badge-neutral');}
+  api('POST','/presenze',{bambino_id:id,data:new Date().toISOString().split('T')[0],presente:true,pasto:_presenze[id].pasto}).catch(()=>{});
 }
 
 async function pagePagamenti() {
-  const bambini = await getBambiniDemo();
+  const bb = await getBambini();
   setContent(`
-    <div class="page-header"><h1>Pagamenti e carnet</h1></div>
+    <div class="page-header">
+      <div class="page-title">Pagamenti e carnet</div>
+      <div class="page-sub">Gestione dei carnet pasti e degli abbonamenti mensili</div>
+      <div class="ph-divider"></div>
+    </div>
     <div class="card">
-      <div class="card-title"><i class="ti ti-ticket"></i> Carnet disponibili (€8/pasto)</div>
+      <div class="card-title"><i class="ti ti-ticket"></i> Carnet pasti disponibili</div>
       <div style="display:flex;gap:12px;margin-bottom:1.5rem">
         ${[{p:10,i:80},{p:20,i:155},{p:30,i:225}].map(c=>`
-          <div style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center">
-            <div style="font-size:28px;font-weight:800">${c.p}</div>
-            <div style="font-size:12px;color:var(--slate)">pasti</div>
-            <div style="font-size:22px;font-weight:800;color:var(--blue);margin:6px 0">€${c.i}</div>
+          <div style="flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:1.125rem;text-align:center">
+            <div style="font-family:var(--font-head);font-size:30px;font-weight:700;color:var(--blue)">${c.p}</div>
+            <div style="font-size:12px;color:var(--slate);font-family:var(--font-body)">pasti</div>
+            <div style="font-family:var(--font-head);font-size:22px;font-weight:700;color:var(--terracotta);margin:6px 0">€${c.i}</div>
+            <div style="font-size:11.5px;color:var(--slate)">€${(c.i/c.p).toFixed(2)}/pasto</div>
           </div>`).join('')}
       </div>
-      <div class="card-title" style="margin-bottom:.75rem"><i class="ti ti-plus"></i> Assegna carnet</div>
+      <div class="section-label">Assegna carnet a un iscritto</div>
       <div class="grid2">
         <div class="form-group"><label class="form-label">Iscritto</label>
-          <select id="pay-bambino"><option value="">-- Seleziona --</option>${bambini.map(b=>`<option value="${b.id}">${b.nome} ${b.cognome}</option>`).join('')}</select>
+          <select id="pay-bambino"><option value="">-- Seleziona --</option>${bb.map(b=>`<option value="${b.id}">${b.nome} ${b.cognome}</option>`).join('')}</select>
         </div>
         <div class="form-group"><label class="form-label">Carnet</label>
           <select id="pay-carnet"><option value="10">10 pasti – €80</option><option value="20">20 pasti – €155</option><option value="30">30 pasti – €225</option></select>
         </div>
       </div>
-      <button class="btn btn-primary" onclick="assegnaCarnet()"><i class="ti ti-plus"></i> Assegna carnet</button>
+      <button class="btn btn-primary" onclick="assegnaCarnet()"><i class="ti ti-plus"></i> Assegna e segna come pagato</button>
     </div>
-    <div class="table-wrap" style="margin-top:1rem">
+    <div class="table-wrap mt-2">
       <table>
-        <thead><tr><th>Bambino</th><th>Sede</th><th>Saldo pasti</th><th>Ultimo pagamento</th><th>Stato abbonamento</th></tr></thead>
-        <tbody>
-          ${bambini.map(b=>`<tr>
-            <td><strong>${b.nome} ${b.cognome}</strong></td>
-            <td>${b.sede_nome}</td>
-            <td><span class="badge ${b.saldo_pasti===0?'badge-danger':b.saldo_pasti<5?'badge-warning':'badge-success'}">${b.saldo_pasti} pasti</span></td>
-            <td style="color:var(--slate);font-size:13px">—</td>
-            <td><span class="badge ${b.pagato?'badge-success':'badge-danger'}">${b.pagato?'Attivo':'Non pagato'}</span></td>
-          </tr>`).join('')}
-        </tbody>
+        <thead><tr><th>Bambino/a</th><th>Sede</th><th>Saldo pasti</th><th>Abbonamento</th></tr></thead>
+        <tbody>${bb.map(b=>`<tr>
+          <td><div class="td-name">${b.nome} ${b.cognome}</div></td>
+          <td>${b.sede_nome}</td>
+          <td><span class="badge ${b.saldo_pasti===0?'badge-danger':b.saldo_pasti<5?'badge-warning':'badge-success'}">${b.saldo_pasti} pasti</span></td>
+          <td><span class="badge ${b.pagato?'badge-success':'badge-danger'}">${b.pagato?'Attivo':'Da rinnovare'}</span></td>
+        </tr>`).join('')}</tbody>
       </table>
     </div>
   `);
@@ -628,19 +1159,21 @@ async function pagePagamenti() {
 
 async function assegnaCarnet() {
   const bambinoId = document.getElementById('pay-bambino').value;
-  const pasti     = parseInt(document.getElementById('pay-carnet').value);
-  if (!bambinoId) { toast('Seleziona un iscritto', 'warning'); return; }
-  try {
-    await api('POST', '/carnet', { bambino_id: bambinoId, pasti });
-    toast('Carnet assegnato e saldo aggiornato', 'success');
-  } catch(e) { toast(e.message, 'danger'); }
+  const pasti = parseInt(document.getElementById('pay-carnet').value);
+  if (!bambinoId) { toast('Seleziona un iscritto','warning'); return; }
+  try { await api('POST','/carnet',{bambino_id:bambinoId,pasti}); toast('Carnet assegnato e saldo aggiornato','success'); }
+  catch(e) { toast(e.message,'danger'); }
 }
 
 function pageOperatori() {
   setContent(`
     <div class="page-header">
       <div class="ph-row">
-        <div><h1>Operatori</h1><p>Account degli educatori del doposcuola</p></div>
+        <div>
+          <div class="page-title">Operatori</div>
+          <div class="page-sub">Account degli educatori del doposcuola</div>
+          <div class="ph-divider"></div>
+        </div>
         <button class="btn btn-primary" onclick="modalNuovoOperatore()"><i class="ti ti-plus"></i> Invita operatore</button>
       </div>
     </div>
@@ -648,9 +1181,8 @@ function pageOperatori() {
       <table>
         <thead><tr><th>Nome</th><th>Email</th><th>Sede/i</th><th>Stato</th><th></th></tr></thead>
         <tbody>
-          <tr><td><strong>Sara Educatore</strong></td><td>sara@officina.it</td><td>Orsini</td><td><span class="badge badge-success">Attivo</span></td><td><button class="btn btn-sm"><i class="ti ti-edit"></i></button></td></tr>
-          <tr><td><strong>Marco Aiuto</strong></td><td>marco.a@officina.it</td><td>Valsalva, Zennaro</td><td><span class="badge badge-success">Attivo</span></td><td><button class="btn btn-sm"><i class="ti ti-edit"></i></button></td></tr>
-          <tr><td><strong>Lucia Bianchi</strong></td><td>lucia@officina.it</td><td>Campanella</td><td><span class="badge badge-neutral">Invitata</span></td><td><button class="btn btn-sm"><i class="ti ti-edit"></i></button></td></tr>
+          <tr><td><div class="td-name">Sara Laderchi</div></td><td class="text-slate text-sm">sara.laderchi@officinaimmaginata.it</td><td>Orsini</td><td><span class="badge badge-success">Attivo</span></td><td><button class="btn btn-sm"><i class="ti ti-edit"></i></button></td></tr>
+          <tr><td><div class="td-name">Marco Educatore</div></td><td class="text-slate text-sm">marco.e@officina.it</td><td>Valsalva, Zennaro</td><td><span class="badge badge-success">Attivo</span></td><td><button class="btn btn-sm"><i class="ti ti-edit"></i></button></td></tr>
         </tbody>
       </table>
     </div>
@@ -659,17 +1191,21 @@ function pageOperatori() {
 
 function pageExport() {
   setContent(`
-    <div class="page-header"><h1>Esporta dati</h1><p>Scarica i dati in formato CSV compatibile con Excel</p></div>
+    <div class="page-header">
+      <div class="page-title">Esporta dati</div>
+      <div class="page-sub">Scarica i dati in formato CSV compatibile con Excel</div>
+      <div class="ph-divider"></div>
+    </div>
     <div class="grid2">
       ${[
-        { tipo:'iscritti',  icon:'ti-users',          title:'Iscritti',          desc:'Schede complete, saldo pasti, contatti genitore' },
-        { tipo:'presenze',  icon:'ti-calendar-check', title:'Registro presenze', desc:'Presenze giornaliere per sede e periodo' },
-        { tipo:'carnet',    icon:'ti-ticket',          title:'Carnet e pagamenti',desc:'Storico acquisti carnet e stato pagamento' },
+        {tipo:'iscritti',  icon:'ti-users',          title:'Iscritti',           desc:'Schede complete, saldo pasti e contatti genitore'},
+        {tipo:'presenze',  icon:'ti-calendar-check', title:'Registro presenze',  desc:'Presenze giornaliere filtrabili per sede e periodo'},
+        {tipo:'carnet',    icon:'ti-ticket',          title:'Carnet e pagamenti', desc:'Storico acquisti carnet e stato pagamento'},
       ].map(e=>`
         <div class="card">
           <div class="card-title"><i class="ti ${e.icon}"></i> ${e.title}</div>
-          <p style="font-size:13px;color:var(--slate);margin-bottom:1rem">${e.desc}</p>
-          <div class="grid2" style="margin-bottom:.75rem">
+          <p style="font-size:13px;color:var(--slate);margin-bottom:1rem;font-family:var(--font-body)">${e.desc}</p>
+          <div class="grid2" style="margin-bottom:.875rem">
             <div class="form-group"><label class="form-label">Dal</label><input type="date" id="exp-dal-${e.tipo}"></div>
             <div class="form-group"><label class="form-label">Al</label><input type="date" id="exp-al-${e.tipo}"></div>
           </div>
@@ -683,116 +1219,131 @@ function pageExport() {
 }
 
 async function doExport(tipo) {
-  const dal = document.getElementById(`exp-dal-${tipo}`)?.value || '';
-  const al  = document.getElementById(`exp-al-${tipo}`)?.value  || '';
-  const url = `/api/export?tipo=${tipo}${dal?`&dal=${dal}`:''}${al?`&al=${al}`:''}`;
+  const dal = document.getElementById(`exp-dal-${tipo}`)?.value||'';
+  const al  = document.getElementById(`exp-al-${tipo}`)?.value||'';
+  const url = `${API}/export?tipo=${tipo}${dal?`&dal=${dal}`:''}${al?`&al=${al}`:''}`;
   try {
-    const res = await fetch(url, { headers: { Authorization: `Bearer ${S.token}` } });
-    if (!res.ok) { toast('Errore export', 'danger'); return; }
+    const res = await fetch(url, {headers:{Authorization:`Bearer ${S.token}`}});
+    if (!res.ok) { toast('Errore export','danger'); return; }
     const blob = await res.blob();
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = `export_${tipo}_${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
-    toast('Download avviato', 'success');
-  } catch(e) { toast(e.message, 'danger'); }
+    toast('Download avviato','success');
+  } catch(e) { toast(e.message,'danger'); }
 }
 
-// ============================================================
-// Pages — Genitore
-// ============================================================
+// ── Genitore pages ────────────────────────────────────────
 async function pageSaldo() {
-  const bambini = await getBambiniDemo();
-  const b = bambini[0];
+  loading();
+  const bb = await getBambini();
+  const b = bb[0];
   setContent(`
-    <div class="page-header"><h1>Saldo pasti</h1><p>${b.nome} ${b.cognome}</p></div>
-    ${b.saldo_pasti < 5 ? `<div class="alert alert-warning"><i class="ti ti-alert-triangle"></i><div><strong>Saldo basso!</strong> Hai ${b.saldo_pasti} pasti residui. Acquista un carnet per non interrompere il servizio mensa.</div></div>` : ''}
+    <div class="page-header">
+      <div class="page-title">Saldo pasti</div>
+      <div class="page-sub">${b.nome} ${b.cognome}</div>
+      <div class="ph-divider"></div>
+    </div>
+    ${b.saldo_pasti<5?`<div class="alert alert-warning"><i class="ti ti-alert-triangle"></i><div><strong>Saldo basso!</strong> Hai ${b.saldo_pasti} pasti residui. Acquista un carnet per non interrompere il servizio mensa.</div></div>`:''}
     <div class="card">
       <div class="saldo-hero">
-        <div class="saldo-num">${b.saldo_pasti}</div>
-        <div class="saldo-label">pasti disponibili</div>
-        <div style="margin-top:1.25rem">
-          <button class="btn btn-primary" onclick="navigate('carnet')"><i class="ti ti-plus"></i> Acquista carnet</button>
+        <div class="saldo-ring">
+          <div class="saldo-num">${b.saldo_pasti}</div>
+          <div class="saldo-label">pasti</div>
         </div>
+        <div style="font-family:var(--font-head);font-size:16px;color:var(--slate);margin-bottom:1.25rem">pasti disponibili</div>
+        <button class="btn btn-primary" onclick="navigate('carnet')"><i class="ti ti-plus"></i> Acquista carnet pasti</button>
       </div>
     </div>
-    <div class="grid2" style="margin-top:1rem">
-      <div class="card"><div style="font-size:12px;color:var(--slate);margin-bottom:4px">Sede</div><div style="font-weight:600">${b.sede_nome}</div></div>
-      <div class="card"><div style="font-size:12px;color:var(--slate);margin-bottom:4px">Orario</div><div style="font-weight:600">${b.orario}</div></div>
-      <div class="card"><div style="font-size:12px;color:var(--slate);margin-bottom:4px">Costo per pasto</div><div style="font-weight:600">€8,00</div></div>
-      <div class="card"><div style="font-size:12px;color:var(--slate);margin-bottom:4px">Abbonamento</div><div><span class="badge ${b.pagato?'badge-success':'badge-danger'}">${b.pagato?'Attivo':'Da rinnovare'}</span></div></div>
+    <div class="info-grid mt-2">
+      ${[['Sede',b.sede_nome],['Orario',b.orario],['Costo per pasto','€ 8,00'],['Abbonamento',b.pagato?'<span class="badge badge-success">Attivo</span>':'<span class="badge badge-danger">Da rinnovare</span>']].map(([k,v])=>`
+        <div class="card"><div class="info-item"><div class="info-label">${k}</div><div class="info-val">${v}</div></div></div>
+      `).join('')}
     </div>
   `);
 }
 
 async function pageCarnet() {
-  const bambini = await getBambiniDemo();
-  const b = bambini[0];
+  const bb = await getBambini();
+  const b = bb[0];
   setContent(`
-    <div class="page-header"><h1>Acquista carnet pasti</h1><p>${b.nome} ${b.cognome} · saldo attuale: <strong>${b.saldo_pasti} pasti</strong></p></div>
-    <div class="carnet-options">
-      ${[{p:10,i:80},{p:20,i:155},{p:30,i:225}].map(c=>`
-        <div class="carnet-card">
-          <div>
-            <div class="carnet-pasti">${c.p} pasti</div>
-            <div class="carnet-sub">€${(c.i/c.p).toFixed(2)} a pasto · Nessuna scadenza</div>
-          </div>
-          <div style="display:flex;align-items:center;gap:1rem">
-            <div class="carnet-price">€${c.i}</div>
-            <button class="btn btn-primary" onclick="modalAcquista(${c.p},${c.i})">Acquista</button>
-          </div>
-        </div>
-      `).join('')}
+    <div class="page-header">
+      <div class="page-title">Acquista carnet pasti</div>
+      <div class="page-sub">${b.nome} ${b.cognome} · saldo attuale: <strong>${b.saldo_pasti} pasti</strong></div>
+      <div class="ph-divider"></div>
     </div>
-    <div class="alert alert-info" style="margin-top:1rem">
+    <div class="carnet-options">
+      <div class="carnet-card" onclick="modalAcquista(10,80)">
+        <div><div class="carnet-pasti">10 pasti</div><div class="carnet-sub">€8,00 a pasto · Senza scadenza</div></div>
+        <div style="display:flex;align-items:center;gap:1rem"><div class="carnet-price">€80</div><button class="btn btn-sm">Acquista</button></div>
+      </div>
+      <div class="carnet-card best" style="position:relative" onclick="modalAcquista(20,155)">
+        <div class="carnet-best-tag">Più scelto</div>
+        <div><div class="carnet-pasti">20 pasti</div><div class="carnet-sub">€7,75 a pasto · Senza scadenza</div></div>
+        <div style="display:flex;align-items:center;gap:1rem"><div class="carnet-price">€155</div><button class="btn btn-primary btn-sm">Acquista</button></div>
+      </div>
+      <div class="carnet-card" onclick="modalAcquista(30,225)">
+        <div><div class="carnet-pasti">30 pasti</div><div class="carnet-sub">€7,50 a pasto · Senza scadenza</div></div>
+        <div style="display:flex;align-items:center;gap:1rem"><div class="carnet-price">€225</div><button class="btn btn-sm">Acquista</button></div>
+      </div>
+    </div>
+    <div class="alert alert-info mt-2">
       <i class="ti ti-info-circle"></i>
-      <div>Il pagamento avviene tramite <strong>bonifico bancario</strong>. Dopo la conferma, il saldo viene aggiornato entro 24h.</div>
+      <div>Il pagamento avviene tramite <strong>bonifico bancario</strong>. Il saldo viene aggiornato entro 24h dalla conferma dell'amministrazione.</div>
     </div>
   `);
 }
 
 function modalAcquista(pasti, importo) {
   showModal(`
-    <h3><i class="ti ti-credit-card"></i> Conferma acquisto carnet</h3>
-    <div style="background:var(--bg);border-radius:10px;padding:1.25rem;text-align:center;margin-bottom:1rem">
-      <div style="font-size:36px;font-weight:800">${pasti} pasti</div>
-      <div style="font-size:28px;font-weight:800;color:var(--blue)">€${importo}</div>
+    <h3><i class="ti ti-credit-card"></i> Conferma acquisto</h3>
+    <div style="background:var(--blue-lt);border-radius:var(--radius-lg);padding:1.5rem;text-align:center;margin-bottom:1.25rem">
+      <div style="font-family:var(--font-head);font-size:40px;font-weight:700;color:var(--blue)">${pasti}</div>
+      <div style="font-family:var(--font-body);font-size:13px;color:var(--slate)">pasti</div>
+      <div style="font-family:var(--font-head);font-size:30px;font-weight:700;color:var(--terracotta)">€${importo}</div>
     </div>
-    <div style="background:var(--bg);border-radius:10px;padding:1rem;font-size:13px;line-height:1.9;margin-bottom:1rem">
-      <strong>Istruzioni per il pagamento:</strong><br>
+    <div class="section-label">Istruzioni per il pagamento</div>
+    <div class="iban-box">
       Intestatario: <strong>Cooperativa Officina Immaginata</strong><br>
       IBAN: <strong>IT00 X000 0000 0000 0000 0000 000</strong><br>
-      Causale: <strong>Carnet ${pasti} pasti – [Nome bambino]</strong>
+      Causale: <strong>Carnet ${pasti} pasti – [Nome bambino/a]</strong>
     </div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal()">Annulla</button>
-      <button class="btn btn-primary" onclick="closeModal();richiediCarnet(${pasti})">Ho effettuato il bonifico</button>
+      <button class="btn btn-primary" onclick="closeModal();richiediCarnet(${pasti})"><i class="ti ti-check"></i> Ho effettuato il bonifico</button>
     </div>
   `);
 }
 
 async function richiediCarnet(pasti) {
   try {
-    const bambini = await getBambiniDemo();
-    await api('POST', '/carnet', { bambino_id: bambini[0].id, pasti });
-    toast('Richiesta inviata. Saldo aggiornato dopo conferma.', 'success');
-  } catch(e) { toast(e.message, 'danger'); }
+    const bb = await getBambini();
+    await api('POST','/carnet',{bambino_id:bb[0].id,pasti});
+    toast('Richiesta inviata. Saldo aggiornato dopo conferma.','success');
+  } catch(e) { toast(e.message,'danger'); }
 }
 
 async function pageScheda() {
-  const bambini = await getBambiniDemo();
-  const b = bambini[0];
-  const sedi = { orsini:'IC7 – Via Vivaldi 76', zennaro:'IC5 – Via Pirandello 12', valsalva:'IC4 – Via Guicciardini 8', campanella:'IC4 – Via Gioberti 1' };
+  const bb = await getBambini();
+  const b = bb[0];
+  const indirizzi = {orsini:'Via Vivaldi 76',zennaro:'Via Pirandello 12',valsalva:'Via Guicciardini 8',campanella:'Via Gioberti 1'};
   setContent(`
-    <div class="page-header"><h1>Scheda iscritto</h1></div>
+    <div class="page-header">
+      <div class="page-title">Scheda iscritto</div>
+      <div class="ph-divider"></div>
+    </div>
     <div class="card">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:1.5rem">
-        <div style="width:52px;height:52px;border-radius:50%;background:var(--blue-lt);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--blue)">${b.nome[0]}${b.cognome[0]}</div>
-        <div><div style="font-size:18px;font-weight:700">${b.nome} ${b.cognome}</div><div style="font-size:13px;color:var(--slate)">${b.classe} · ${b.sede_nome}</div></div>
+        <div class="avatar" style="width:56px;height:56px;font-size:20px">${b.nome[0]}${b.cognome[0]}</div>
+        <div>
+          <div style="font-family:var(--font-head);font-size:20px;font-weight:700;color:var(--blue)">${b.nome} ${b.cognome}</div>
+          <div style="font-family:var(--font-body);font-size:13.5px;color:var(--slate)">${b.classe} · ${b.sede_nome}</div>
+        </div>
       </div>
-      <div class="grid2">
-        ${[['Sede',b.sede_nome],['Indirizzo',sedi[b.sede_id]||''],['Orario',b.orario],['Classe',b.classe]].map(([k,v])=>`
-          <div><div style="font-size:12px;color:var(--slate);margin-bottom:2px">${k}</div><div style="font-weight:500">${v}</div></div>
+      <div class="info-grid">
+        ${[['Sede',b.sede_nome],['Indirizzo',indirizzi[b.sede_id]||''],['Orario abbonamento',b.orario],['Classe',b.classe]].map(([k,v])=>`
+          <div class="info-item"><div class="info-label">${k}</div><div class="info-val">${v}</div></div>
         `).join('')}
       </div>
     </div>
@@ -800,162 +1351,161 @@ async function pageScheda() {
 }
 
 async function pagePresenzeGenitore() {
-  const bambini = await getBambiniDemo();
-  const b = bambini[0];
+  const bb = await getBambini();
+  const b = bb[0];
   const giorni = ['Lun','Mar','Mer','Gio','Ven'];
-  const settimana = [];
   const oggi = new Date();
-  for (let i=0;i<5;i++) {
-    const d = new Date(oggi);
-    d.setDate(oggi.getDate() - oggi.getDay() + 1 + i);
-    settimana.push(d);
-  }
+  const settimana = Array.from({length:5},(_,i)=>{
+    const d=new Date(oggi); d.setDate(oggi.getDate()-oggi.getDay()+1+i); return d;
+  });
   setContent(`
-    <div class="page-header"><h1>Presenze</h1><p>Settimana corrente · ${b.nome} ${b.cognome}</p></div>
+    <div class="page-header">
+      <div class="page-title">Presenze</div>
+      <div class="page-sub">Settimana corrente · ${b.nome} ${b.cognome}</div>
+      <div class="ph-divider"></div>
+    </div>
     <div class="card">
       <div class="week-grid">
-        ${settimana.map((d,i) => {
-          const presente = Math.random() > 0.25;
+        ${settimana.map((d,i)=>{
+          const presente=Math.random()>0.25;
           return `<div class="week-day ${presente?'present':''}">
             <div class="wd-name">${giorni[i]}</div>
             <div class="wd-num">${d.getDate()}</div>
-            <div class="wd-icon"><i class="ti ${presente?'ti-check':'ti-x'}" style="color:${presente?'var(--green)':'var(--muted)'}"></i></div>
+            <div class="wd-icon"><i class="ti ${presente?'ti-check':'ti-x'}" style="color:${presente?'#1a6b3a':'var(--slate)'}"></i></div>
           </div>`;
         }).join('')}
+      </div>
+      <div style="display:flex;gap:1rem;margin-top:1rem;font-size:12.5px;color:var(--slate);font-family:var(--font-body)">
+        <span><i class="ti ti-check" style="color:#1a6b3a"></i> Presente</span>
+        <span><i class="ti ti-x"></i> Assente</span>
       </div>
     </div>
   `);
 }
 
-// ============================================================
-// Pages — Operatore
-// ============================================================
+// ── Operatore pages ───────────────────────────────────────
 async function pagePresenze() {
-  const sedeid = S.user.sede || 'orsini';
-  const bambini = (await getBambiniDemo()).filter(b=>b.sede_id===sedeid);
+  loading();
+  const sedeId = S.user.sede||'orsini';
+  const bb = (await getBambini()).filter(b=>b.sede_id===sedeId);
+  const sedeName = {orsini:'Orsini',zennaro:'Sante Zennaro',valsalva:'Valsalva',campanella:'Campanella'};
   const oggi = new Date().toISOString().split('T')[0];
   setContent(`
-    <div class="page-header"><h1>Registro presenze</h1><p>${capitalise(sedeid)} · ${formatData(oggi)}</p></div>
+    <div class="page-header">
+      <div class="page-title">Registro presenze</div>
+      <div class="page-sub">${sedeName[sedeId]} · ${formatData(oggi)}</div>
+      <div class="ph-divider"></div>
+    </div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Bambino/a</th><th>Presente</th><th>Pasto mensa</th><th>Saldo</th></tr></thead>
-        <tbody>
-          ${bambini.map(b=>`<tr>
-            <td><strong>${b.nome} ${b.cognome}</strong><br><span style="font-size:12px;color:var(--slate)">${b.classe}</span></td>
-            <td><button class="btn btn-sm" id="op-p-${b.id}" onclick="togglePresOp('${b.id}','${sedeid}',this)">${presenza(b.id)?'<i class=\"ti ti-check\"></i> Presente':'Assente'}</button></td>
-            <td><button class="btn btn-sm" id="op-pa-${b.id}" onclick="togglePastoOp('${b.id}','${sedeid}',this)" ${!presenza(b.id)?'disabled':''}>${pasto(b.id)?'<i class=\"ti ti-soup\"></i> Segnato':'Segna pasto'}</button></td>
-            <td><span class="badge ${b.saldo_pasti<5?'badge-warning':'badge-neutral'}" id="op-saldo-${b.id}">${b.saldo_pasti}</span></td>
-          </tr>`).join('')}
-        </tbody>
+        <tbody>${bb.map(b=>`<tr>
+          <td><div class="td-name">${b.nome} ${b.cognome}</div><div class="td-sub">${b.classe}</div></td>
+          <td><button class="btn btn-sm ${presenza(b.id)?'btn-accent':''}" id="op-p-${b.id}" onclick="togglePres('${b.id}','${sedeId}',this,'op-p-','op-pa-')">${presenza(b.id)?'<i class="ti ti-check"></i> Presente':'Assente'}</button></td>
+          <td><button class="btn btn-sm ${pasto(b.id)?'btn-primary':''}" id="op-pa-${b.id}" onclick="togglePasto('${b.id}','op-saldo-${b.id}',this)" ${!presenza(b.id)?'disabled':''}>${pasto(b.id)?'<i class="ti ti-soup"></i> Segnato':'Segna pasto'}</button></td>
+          <td><span class="badge ${b.saldo_pasti<5?'badge-warning':'badge-neutral'}" id="op-saldo-${b.id}">${b.saldo_pasti}</span></td>
+        </tr>`).join('')}</tbody>
       </table>
     </div>
-    <div style="margin-top:1rem;display:flex;justify-content:flex-end">
-      <button class="btn btn-primary" onclick="salvaPres('${sedeid}')"><i class="ti ti-device-floppy"></i> Salva registro</button>
+    <div style="display:flex;justify-content:flex-end;margin-top:1rem">
+      <button class="btn btn-primary" onclick="salvaPres('${sedeId}')"><i class="ti ti-device-floppy"></i> Salva registro</button>
     </div>
   `);
-}
-
-function togglePresOp(id, sede, btn) { togglePres(id, sede, btn); }
-
-function togglePastoOp(id, sede, btn) {
-  if (!_presenze[id]) _presenze[id] = {};
-  _presenze[id].pasto = !_presenze[id].pasto;
-  btn.innerHTML = _presenze[id].pasto ? '<i class="ti ti-soup"></i> Segnato' : 'Segna pasto';
-  btn.className = 'btn btn-sm' + (_presenze[id].pasto ? ' btn-success' : '');
-  const saldo = document.getElementById('op-saldo-'+id);
-  if (saldo) {
-    const n = parseInt(saldo.textContent) + (_presenze[id].pasto ? -1 : 1);
-    saldo.textContent = Math.max(0,n);
-    saldo.className = 'badge ' + (n < 5 ? 'badge-warning' : 'badge-neutral');
-  }
-}
-
-async function salvaPres(sedeId) {
-  const bambini = (await getBambiniDemo()).filter(b=>b.sede_id===sedeId);
-  const oggi = new Date().toISOString().split('T')[0];
-  const payload = bambini.map(b=>({
-    bambino_id: b.id, data: oggi,
-    presente: presenza(b.id), pasto: pasto(b.id),
-  }));
-  try {
-    for (const p of payload) await api('POST', '/presenze', p);
-    toast('Registro salvato e saldi aggiornati', 'success');
-  } catch(e) { toast(e.message, 'danger'); }
 }
 
 async function pagePasti() { return pagePresenze(); }
 
+async function salvaPres(sedeId) {
+  const bb = (await getBambini()).filter(b=>b.sede_id===sedeId);
+  const oggi = new Date().toISOString().split('T')[0];
+  try {
+    for (const b of bb) await api('POST','/presenze',{bambino_id:b.id,data:oggi,presente:presenza(b.id),pasto:pasto(b.id)});
+    toast('Registro salvato e saldi aggiornati','success');
+  } catch(e) { toast(e.message,'danger'); }
+}
+
 async function pageBambiniOp() {
-  const sedeid = S.user.sede || 'orsini';
-  const bambini = (await getBambiniDemo()).filter(b=>b.sede_id===sedeid);
+  loading();
+  const sedeId = S.user.sede||'orsini';
+  const bb = (await getBambini()).filter(b=>b.sede_id===sedeId);
+  const sedeName = {orsini:'Orsini',zennaro:'Sante Zennaro',valsalva:'Valsalva',campanella:'Campanella'};
   setContent(`
-    <div class="page-header"><h1>Bambini iscritti</h1><p>${capitalise(sedeid)}</p></div>
+    <div class="page-header">
+      <div class="page-title">Bambini iscritti</div>
+      <div class="page-sub">${sedeName[sedeId]}</div>
+      <div class="ph-divider"></div>
+    </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Nome</th><th>Classe</th><th>Orario</th><th>Saldo pasti</th></tr></thead>
-        <tbody>
-          ${bambini.map(b=>`<tr>
-            <td><strong>${b.nome} ${b.cognome}</strong></td>
-            <td>${b.classe}</td>
-            <td>${b.orario}</td>
-            <td><span class="badge ${b.saldo_pasti<5?'badge-warning':'badge-neutral'}">${b.saldo_pasti}</span></td>
-          </tr>`).join('')}
-        </tbody>
+        <thead><tr><th>Bambino/a</th><th>Classe</th><th>Orario</th><th>Saldo pasti</th></tr></thead>
+        <tbody>${bb.map(b=>`<tr>
+          <td><div class="td-name">${b.nome} ${b.cognome}</div></td>
+          <td>${b.classe}</td>
+          <td>${b.orario}</td>
+          <td><span class="badge ${b.saldo_pasti<5?'badge-warning':'badge-neutral'}">${b.saldo_pasti}</span></td>
+        </tr>`).join('')}</tbody>
       </table>
     </div>
   `);
 }
 
-// ============================================================
-// Impostazioni (comune)
-// ============================================================
+// ── Impostazioni ──────────────────────────────────────────
 function pageImpostazioni() {
   const u = S.user;
   setContent(`
-    <div class="page-header"><h1>Impostazioni</h1></div>
+    <div class="page-header">
+      <div class="page-title">Impostazioni</div>
+      <div class="ph-divider"></div>
+    </div>
     <div class="card">
       <div class="card-title"><i class="ti ti-user"></i> Dati account</div>
       <div class="grid2">
-        <div class="form-group"><label class="form-label">Nome</label><input type="text" id="set-name" value="${u.name}"></div>
-        <div class="form-group"><label class="form-label">Email</label><input type="email" value="${u.email}" disabled style="opacity:.6"></div>
+        <div class="form-group"><label class="form-label">Nome</label><input type="text" value="${u.name}"></div>
+        <div class="form-group"><label class="form-label">Email</label><input type="email" value="${u.email}" disabled></div>
       </div>
-      <button class="btn btn-primary" onclick="toast('Dati salvati','success')"><i class="ti ti-device-floppy"></i> Salva</button>
+      <button class="btn btn-primary" onclick="toast('Dati aggiornati','success')"><i class="ti ti-device-floppy"></i> Salva</button>
     </div>
     <div class="card">
       <div class="card-title"><i class="ti ti-bell"></i> Notifiche email</div>
-      ${[
-        ['Saldo pasti basso (< 5 pasti)','Avviso automatico quando il saldo scende sotto 5',true],
-        ['Rinnovo abbonamento mensile','Promemoria 7 giorni prima',true],
-      ].map(([t,d,on])=>`
-        <div class="flex-sb" style="padding:10px 0;border-bottom:1px solid var(--border)">
-          <div><div style="font-weight:500">${t}</div><div style="font-size:12px;color:var(--slate)">${d}</div></div>
-          <button class="btn btn-sm ${on?'btn-success':''}" onclick="this.className='btn btn-sm '+(this.textContent.trim()==='Attivo'?'':'btn-success');this.textContent=this.textContent.trim()==='Attivo'?'Disattivo':'Attivo';toast('Preferenza salvata','success')">${on?'Attivo':'Disattivo'}</button>
+      ${[['Saldo pasti basso (< 5 pasti)','Avviso quando il saldo scende sotto 5',true],['Rinnovo abbonamento','Promemoria 7 giorni prima della scadenza',true]].map(([t,d,on])=>`
+        <div class="flex-sb" style="padding:11px 0;border-bottom:1px solid var(--border)">
+          <div>
+            <div style="font-family:var(--font-head);font-weight:600;font-size:13.5px">${t}</div>
+            <div style="font-size:12.5px;color:var(--slate);font-family:var(--font-body)">${d}</div>
+          </div>
+          <button class="btn btn-sm ${on?'btn-primary':''}" onclick="this.className='btn btn-sm '+(this.textContent.trim()==='Attivo'?'':'btn-primary');this.textContent=this.textContent.trim()==='Attivo'?'Disattivo':'Attivo'">${on?'Attivo':'Disattivo'}</button>
         </div>`).join('')}
     </div>
     <div class="card">
-      <div class="card-title"><i class="ti ti-mail"></i> Accesso</div>
-      <p style="font-size:13px;color:var(--slate);margin-bottom:.75rem">Invia un nuovo magic link al tuo indirizzo email per accedere senza password.</p>
-      <button class="btn" onclick="api('POST','/auth/magic-link',{email:'${u.email}'}).then(()=>toast('Magic link inviato a ${u.email}','success'))"><i class="ti ti-mail"></i> Invia magic link</button>
+      <div class="card-title"><i class="ti ti-mail"></i> Accesso senza password</div>
+      <p style="font-size:13.5px;color:var(--slate);margin-bottom:.875rem;font-family:var(--font-body)">Ricevi un link di accesso diretto alla tua email.</p>
+      <button class="btn" onclick="api('POST','/auth/magic-link',{email:'${u.email}'}).then(()=>toast('Magic link inviato','success'))"><i class="ti ti-mail"></i> Invia magic link</button>
     </div>
   `);
 }
 
-// ============================================================
-// Modali admin
-// ============================================================
+// ── Modali admin ──────────────────────────────────────────
 function modalScheda(b) {
   showModal(`
     <h3><i class="ti ti-id-badge"></i> Scheda iscritto</h3>
-    <div class="grid2" style="margin-bottom:1rem">
-      ${[['Nome',b.nome+' '+b.cognome],['Classe',b.classe],['Sede',b.sede_nome],['Orario',b.orario],['Genitore',b.genitore],['Email',b.email]].map(([k,v])=>`
-        <div><div class="form-label">${k}</div><div style="font-size:13.5px">${v||'—'}</div></div>`).join('')}
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.25rem">
+      <div class="avatar" style="width:52px;height:52px;font-size:17px">${b.nome[0]}${b.cognome[0]}</div>
+      <div>
+        <div style="font-family:var(--font-head);font-size:17px;font-weight:700;color:var(--blue)">${b.nome} ${b.cognome}</div>
+        <div style="font-size:13px;color:var(--slate)">${b.classe} · ${b.sede_nome}</div>
+      </div>
     </div>
-    <div class="flex-row" style="margin-bottom:1rem">
-      <div class="form-label" style="margin:0">Saldo pasti:</div>
+    <div class="info-grid">
+      ${[['Sede',b.sede_nome],['Orario',b.orario],['Genitore',b.genitore],['Email',b.email]].map(([k,v])=>`
+        <div class="info-item"><div class="info-label">${k}</div><div class="info-val">${v||'—'}</div></div>
+      `).join('')}
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:1rem">
+      <span style="font-family:var(--font-head);font-size:12px;color:var(--slate)">SALDO PASTI</span>
       <span class="badge ${b.saldo_pasti<5?'badge-warning':'badge-success'}">${b.saldo_pasti} pasti residui</span>
       <span class="badge ${b.pagato?'badge-success':'badge-danger'}">${b.pagato?'Abbonamento attivo':'Da rinnovare'}</span>
     </div>
-    ${b.saldo_pasti < 5 ? `<div class="alert alert-warning"><i class="ti ti-alert-triangle"></i> Saldo basso — notifica inviata al genitore.</div>` : ''}
+    ${b.saldo_pasti<5?`<div class="alert alert-warning mt-1"><i class="ti ti-alert-triangle"></i> Notifica saldo basso inviata al genitore.</div>`:''}
     <div class="modal-footer">
       <button class="btn" onclick="closeModal()">Chiudi</button>
       <button class="btn btn-primary" onclick="closeModal();navigate('pagamenti')"><i class="ti ti-ticket"></i> Ricarica pasti</button>
@@ -967,13 +1517,13 @@ function modalNuovoIscritto() {
   showModal(`
     <h3><i class="ti ti-user-plus"></i> Nuovo iscritto</h3>
     <div class="grid2">
-      <div class="form-group"><label class="form-label">Nome bambino/a</label><input type="text" id="ni-nome" placeholder="Nome"></div>
-      <div class="form-group"><label class="form-label">Cognome</label><input type="text" id="ni-cognome" placeholder="Cognome"></div>
-      <div class="form-group"><label class="form-label">Email genitore</label><input type="email" id="ni-email" placeholder="email@esempio.it"></div>
-      <div class="form-group"><label class="form-label">Nome genitore</label><input type="text" id="ni-genitore" placeholder="Nome Cognome"></div>
+      <div class="form-group"><label class="form-label">Nome bambino/a</label><input type="text" placeholder="Nome"></div>
+      <div class="form-group"><label class="form-label">Cognome</label><input type="text" placeholder="Cognome"></div>
+      <div class="form-group"><label class="form-label">Email genitore</label><input type="email" placeholder="email@esempio.it"></div>
+      <div class="form-group"><label class="form-label">Nome genitore</label><input type="text" placeholder="Nome Cognome"></div>
     </div>
     <div class="form-group"><label class="form-label">Sede</label>
-      <select id="ni-sede">
+      <select>
         <option value="orsini">Orsini — IC7 Via Vivaldi</option>
         <option value="zennaro">Sante Zennaro — IC5 Via Pirandello</option>
         <option value="valsalva">Valsalva — IC4 Via Guicciardini</option>
@@ -981,18 +1531,18 @@ function modalNuovoIscritto() {
       </select>
     </div>
     <div class="grid2">
-      <div class="form-group"><label class="form-label">Classe</label><input type="text" id="ni-classe" placeholder="es. 3ª elementare"></div>
+      <div class="form-group"><label class="form-label">Classe</label><input type="text" placeholder="es. 3ª elementare"></div>
       <div class="form-group"><label class="form-label">Orario</label>
-        <select id="ni-orario">
-          <option value="13:00-17:00">13:00–17:00 (€190/mese)</option>
-          <option value="14:00-17:00">14:00–17:00 (€150/mese)</option>
-          <option value="12:45-16:45">12:45–16:45 (€75/mese)</option>
+        <select>
+          <option value="13:00-17:00">13:00–17:00 · €190/mese</option>
+          <option value="14:00-17:00">14:00–17:00 · €150/mese</option>
+          <option value="12:45-16:45">12:45–16:45 · €75/mese</option>
         </select>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal()">Annulla</button>
-      <button class="btn btn-primary" onclick="closeModal();toast('Iscritto aggiunto, email di benvenuto inviata','success')"><i class="ti ti-check"></i> Aggiungi</button>
+      <button class="btn btn-primary" onclick="closeModal();toast('Iscritto aggiunto e email di benvenuto inviata','success')"><i class="ti ti-check"></i> Aggiungi iscritto</button>
     </div>
   `);
 }
@@ -1005,9 +1555,9 @@ function modalNuovoOperatore() {
       <div class="form-group"><label class="form-label">Email</label><input type="email" placeholder="email@officina.it"></div>
     </div>
     <div class="form-group"><label class="form-label">Sede/i assegnate</label>
-      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px">
-        ${['Orsini','Zennaro','Valsalva','Campanella'].map(s=>`
-          <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;cursor:pointer">
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px">
+        ${['Orsini','Sante Zennaro','Valsalva','Campanella'].map(s=>`
+          <label style="display:flex;align-items:center;gap:6px;font-family:var(--font-body);font-size:14px;cursor:pointer">
             <input type="checkbox" style="width:auto"> ${s}
           </label>`).join('')}
       </div>
@@ -1019,61 +1569,35 @@ function modalNuovoOperatore() {
   `);
 }
 
-// ============================================================
-// Utilities
-// ============================================================
+// ── Helpers ───────────────────────────────────────────────
 function showModal(html) {
   document.getElementById('modal-root').innerHTML = `
     <div class="modal-bg" onclick="if(event.target===this)closeModal()">
       <div class="modal">${html}</div>
     </div>`;
 }
-
-function closeModal() {
-  document.getElementById('modal-root').innerHTML = '';
-}
+function closeModal() { document.getElementById('modal-root').innerHTML=''; }
 
 let _toastTimer;
 function toast(msg, type='success') {
   const cfg = {
-    success: { bg:'var(--green-lt)',  color:'var(--green)', icon:'ti-check' },
-    warning: { bg:'var(--amber-lt)',  color:'var(--amber)', icon:'ti-alert-triangle' },
-    danger:  { bg:'var(--red-lt)',    color:'var(--red)',   icon:'ti-x' },
+    success:{ bg:'#e8f5f0', color:'#1a5c30', icon:'ti-check', border:'#4caf50' },
+    warning:{ bg:'var(--saffron-lt)', color:'#6b4c00', icon:'ti-alert-triangle', border:'var(--saffron)' },
+    danger: { bg:'var(--terra-lt)', color:'var(--terracotta)', icon:'ti-x', border:'var(--terracotta)' },
   };
-  const c = cfg[type] || cfg.success;
+  const c = cfg[type]||cfg.success;
   const el = document.getElementById('toast');
-  el.style.background = c.bg; el.style.color = c.color; el.style.display = 'flex'; el.style.opacity = '1';
-  el.innerHTML = `<i class="ti ${c.icon}"></i> ${msg}`;
+  Object.assign(el.style, {background:c.bg, color:c.color, borderLeft:`4px solid ${c.border}`, display:'flex', opacity:'1'});
+  el.innerHTML = `<i class="ti ${c.icon}" style="font-size:18px;flex-shrink:0"></i> ${msg}`;
   clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(()=>{ el.style.opacity='0'; setTimeout(()=>el.style.display='none', 300); }, 3500);
+  _toastTimer = setTimeout(()=>{ el.style.opacity='0'; setTimeout(()=>el.style.display='none',300); }, 3500);
 }
 
 function formatData(d) {
   return new Date(d+'T12:00:00').toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 }
 
-function capitalise(s) { return s.charAt(0).toUpperCase()+s.slice(1); }
-
-// Dati demo (sostituiti da chiamate API reali in produzione)
-async function getBambiniDemo() {
-  if (S.token !== 'demo-token') {
-    try {
-      const data = await api('GET', '/bambini');
-      if (data) return data;
-    } catch(e) {}
-  }
-  return [
-    { id:'b1', nome:'Sofia',  cognome:'Martini',  classe:'3ª elementare', sede_id:'orsini',     sede_nome:'Orsini',       orario:'13:00-17:00', genitore:'Marco Martini',  email:'marco@esempio.it',  saldo_pasti:12, pagato:true },
-    { id:'b2', nome:'Luca',   cognome:'Bianchi',   classe:'1ª media',     sede_id:'valsalva',   sede_nome:'Valsalva',     orario:'14:00-17:00', genitore:'Elena Bianchi',  email:'elena@esempio.it',  saldo_pasti:3,  pagato:true },
-    { id:'b3', nome:'Giulia', cognome:'Rossi',     classe:'5ª elementare',sede_id:'orsini',     sede_nome:'Orsini',       orario:'13:00-17:00', genitore:'Franco Rossi',   email:'franco@esempio.it', saldo_pasti:0,  pagato:false },
-    { id:'b4', nome:'Ahmed',  cognome:'Tazi',      classe:'2ª media',     sede_id:'zennaro',    sede_nome:'Sante Zennaro',orario:'14:00-17:00', genitore:'Fatima Tazi',   email:'fatima@esempio.it', saldo_pasti:8,  pagato:true },
-    { id:'b5', nome:'Chiara', cognome:'Verdi',     classe:'2ª elementare',sede_id:'campanella', sede_nome:'Campanella',   orario:'12:45-16:45', genitore:'Paolo Verdi',   email:'paolo@esempio.it',  saldo_pasti:15, pagato:true },
-  ];
-}
-
-// ============================================================
-// Boot
-// ============================================================
+// ── Start ─────────────────────────────────────────────────
 boot();
 </script>
 </body>
